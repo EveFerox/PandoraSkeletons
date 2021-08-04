@@ -4,7 +4,7 @@ class SkeletonContainer {
 	container = null;
 	containers = {};
 	renderOrder = [];
-	
+
 	/**
 	 * Holds Containers for a BodySkeleton
 	 * @param {BodySkeleton} Skeleton - The skeleton for this container
@@ -12,49 +12,74 @@ class SkeletonContainer {
 	constructor(Skeleton) {
 		this.containers = {};
 		this.renderOrder = [];
-		
+
 		for (let S = 0; S < Skeleton.segments.length; S++) {
 			let seg = Skeleton.segments[S];
 			this.containers[seg.Name] = new PIXI.Container();
 			this.renderOrder.push(seg);
 		}
-		
+
 		this.container = this.containers[Skeleton.head.Name];
-		
-		// TODO add layering priority by sorting this.RenderOrder
-		
+
+		this.renderOrder.sort((a, b) => {return a.Priority - b.Priority;});
+
 		for (let S = 0; S < this.renderOrder.length; S++) {
 			let seg = this.renderOrder[S];
 			let segContainer = this.containers[seg.Name];
-			
+
 			if (seg.Parent)
 				this.containers[seg.Parent].addChild(segContainer);
-			
+
 			const sprite = new PIXI.Sprite(PIXI.Texture.from(seg.Path));
 			sprite.x = -seg.Pos.PivotX;
 			sprite.y = -seg.Pos.PivotY;
 			segContainer.addChild(sprite);
-			
+
 			segContainer.x = seg.Pos.ParentX * (seg.Invert ? -1 : 1);
 			segContainer.y = seg.Pos.ParentY;
 		}
-		
-		
+
+
 	}
-	
+
+	updateExtension() {
+		for (let S = 0; S < this.renderOrder.length; S++) {
+			let seg = this.renderOrder[S];
+			let segContainer = this.containers[seg.Name];
+
+			segContainer.rotation = seg.extensionAngle;
+
+			if (segContainer != this.container) { // We dont move the main container
+				let xoffset = 0;
+				let yoffset = 0;
+
+				if (seg.extension > 0) {
+					xoffset = seg.Rotation.TranslateXPos ? seg.Rotation.TranslateXPos * seg.extension : 0;
+					yoffset = seg.Rotation.TranslateYPos ? seg.Rotation.TranslateYPos * seg.extension : 0;
+				} else {
+					xoffset = seg.Rotation.TranslateXNeg ? -seg.Rotation.TranslateXNeg * seg.extension : 0;
+					yoffset = seg.Rotation.TranslateYNeg ? -seg.Rotation.TranslateYNeg * seg.extension : 0;
+				}
+
+				segContainer.x = (seg.Pos.ParentX + xoffset) * (seg.Invert ? -1 : 1);
+				segContainer.y = seg.Pos.ParentY + yoffset;
+			}
+		}
+	}
+
 }
 
 class BodySkeleton {
 	segments = [];
 	head = null;
-	
+
 	/**
 	 * Holds BodySegment options and utility functions
 	 */
 	constructor() {
 		this.segments = [];
 	}
-	
+
 	/**
 	 * Assigns parents to children
 	 * @param {string} Head - Optional name of the head
@@ -72,7 +97,7 @@ class BodySkeleton {
 			}
 		} else console.log("Warning, torso not found when generating skeleton");
 	}
-	
+
 	/**
 	 * Returns the named segment
 	 * @param {string} Name - Name of the segment
@@ -95,14 +120,14 @@ class BodySegment {
 	Parent;
 	Pos;
 	Rotation;
-	Extension = null;
+	Ext = null;
 	Weight = null;
-	
+
 	segParent = null;
 	segExtensionParent = null;
 	segChildren = [];
 	segExtension = 0.0;
-	
+
 	/**
 	 * A segment for use in Pandora characters
 	 * @param {string} Name - Name of the segment
@@ -126,14 +151,14 @@ class BodySegment {
 	 * @param {float} Rotation.SquashYPos - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
 	 * @param {float} Rotation.SquashXNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
 	 * @param {float} Rotation.SquashYNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
-	 * @param {} Extension - OPTIONAL extension parents for non-free segments
-	 * @param {string} Extension.Parent - if Ext is null, this is a free rotating segment. If specified, this will not freely rotate but the extension (percentage of min/max angle) will be copied from the specified segment
-	 * @param {string} Extension.Mult - multiplier for the extension parent. Basically if this is set to 0.75 and the extension parent is the arm, then this will rotate at 75% of the rate that the arm does. Good for shoulders
+	 * @param {} Ext - OPTIONAL extension parents for non-free segments
+	 * @param {string} Ext.Parent - if Ext is null, this is a free rotating segment. If specified, this will not freely rotate but the extension (percentage of min/max angle) will be copied from the specified segment
+	 * @param {string} Ext.Mult - multiplier for the extension parent. Basically if this is set to 0.75 and the extension parent is the arm, then this will rotate at 75% of the rate that the arm does. Good for shoulders
 	 * @param {} Weight - OPTIONAL squish and offset based on weight
 	 * @param {dict} Weight.Mult - a dict {} containing names of params and how much they are multiplied by based on the weight property assigned to the character body
 	 * @param {dict} Weight.Offset - a dict {} containing names of params and how much they are offset by based on the weight property assigned to the character body
-	 */ 
-	constructor(Name, Priority, Path, Parent, Invert, Pos, Rotation, Extension, Weight) {
+	 */
+	constructor(Name, Priority, Path, Parent, Invert, Pos, Rotation, Ext, Weight) {
 		this.Name = Name;
 		this.Priority = Priority;
 		this.Path = Path;
@@ -141,22 +166,22 @@ class BodySegment {
 		this.Invert = Invert;
 		this.Pos = Pos;
 		this.Rotation = Rotation;
-		this.Extension = Extension;
+		this.Ext = Ext;
 		this.Weight = Weight;
 	}
-		
+
 	/**
 	 * A sets the parent, called for everything in the skeleton once all segments are added
 	 * @param {list} Skeleton - List of BodySegments
 	 * @returns {boolean} - Whether or not the operation was successful
-	 */ 
+	 */
 	setParent(Skeleton) {
 		let pass = 0;
 		if (!this.Parent) return true;
 		for (let S = 0; S < Skeleton.length; S++) {
 			if (Skeleton[S].Name == this.Parent) {
 				this.segParent = Skeleton[S];
-				if (!this.Extension)
+				if (!this.Ext)
 					return this.segParent.addChild(this);
 				else {
 					pass += 1;
@@ -165,20 +190,20 @@ class BodySegment {
 			}
 		}
 		for (let S = 0; S < Skeleton.length; S++) {
-			if (Skeleton[S].Name == this.Extension.Parent) {
+			if (Skeleton[S].Name == this.Ext.Parent) {
 				this.segExtensionParent = Skeleton[S];
 				pass += 1;
 				break;
 			}
 		}
-		
+
 		return pass == 2;
 	}
-	
+
 	/**
 	 * Gets a copied list of children
 	 * @returns {list} - List of children
-	 */ 
+	 */
 	getChildren() {
 		let temp = [];
 		for (let C = 0; C < this.segChildren.length; C++) {
@@ -186,69 +211,77 @@ class BodySegment {
 		}
 		return temp;
 	}
-	
+
 	/**
 	 * Clears the current children of the segment
-	 */ 
+	 */
 	clearChildren() {
 		this.segChildren = [];
 	}
-	
+
 	/**
 	 * Adds a child to this segment
 	 * @param {BodySegment} Child - The child to add
 	 * @returns {boolean} - Whether or not the operation was successful
-	 */ 
+	 */
 	addChild(Child) {
 		for (let C = 0; C < this.segChildren.length; C++) {
 			if (this.segChildren[C].Name == Child.Name) {
-				
+
 				return false;
 			}
 		}
 		this.segChildren.push(Child);
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Gets the current extension percent
 	 * @returns {float} - Current Extension Percentage
-	 */ 
+	 */
 	get extension() {
+		if (this.Ext && this.segExtensionParent) {
+			this.segExtension = this.segExtensionParent.extension;
+		}
 		return this.segExtension;
 	}
 	/**
 	 * Gets the current extension as an angle
 	 * @returns {float} - Extension converted to angle
-	 */ 
+	 */
 	get extensionAngle() {
+		if (this.Ext && this.segExtensionParent) {
+			this.segExtension = this.segExtensionParent.extension;
+		}
 		let ang = 0;
-		if (this.segExtension > 0) return this.Rotation.AngleMax * this.segExtension;
-		else return this.Rotation.AngleMin * this.segExtension;
+		if (this.segExtension > 0) return  (this.Invert ? -1 : 1) * this.Rotation.AngleMax * this.segExtension;
+		else return (this.Invert ? 1 : -1) * this.Rotation.AngleMin * this.segExtension;
 	}
-	
+
 	/**
 	 * Sets the extension in terms of percentage of max
 	 * @param {float} Amount - Sets the extension in terms of percentage of max
-	 */ 
+	 */
 	setExtension(Amount) {
+		if (this.Ext) return;
 		this.segExtension = Math.min(1, Math.max(-1, Amount));
 	}
-	
+
 	/**
 	 * Sets the extension internally, based on an angle
 	 * @param {float} Angle - Sets the extension in radians
-	 */ 
+	 */
 	setExtensionAngle(Angle) {
+		if (this.Ext) return;
 		let ang = (this.Invert ? -Angle : Angle);
 		let ext = 0;
 		if (ang > 0 && this.Rotation.AngleMax > 0) {
-			ext = ang/this.Rotation.AngleMax;			
+			ext = ang/this.Rotation.AngleMax;
 		} else if (ang < 0 && this.Rotation.AngleMin < 0) {
 			ext = ang/this.Rotation.AngleMin;
 		}
-		
+
 		this.segExtension = Math.min(1, Math.max(-1, ext));
 	}
 }
