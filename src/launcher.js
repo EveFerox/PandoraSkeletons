@@ -49,7 +49,7 @@ function LauncherLaunchGame(width, height) {
 			SquashYNeg: 0,
 		}, {
 			Parent: "ArmR",
-			Mult: 0.75,
+			Mult: 1,
 		}));
 	skelly.segments.push(new BodySegment("ShoulderR", 50, 'img/ShoulderR.png', "Torso", true,
 		{
@@ -70,7 +70,7 @@ function LauncherLaunchGame(width, height) {
 			SquashYNeg: 0,
 		}, {
 			Parent: "ArmR",
-			Mult: 0.75,
+			Mult: 1,
 		}));
 	skelly.segments.push(new BodySegment("ArmL", 60, 'img/ArmL.png', "Torso", false,
 		{
@@ -101,6 +101,82 @@ function LauncherLaunchGame(width, height) {
 			TranslateXPos: 15,
 			TranslateYPos: 0,
 			TranslateXNeg: -10,
+			TranslateYNeg: 0,
+			SquashXPos: 0,
+			SquashYPos: 0,
+			SquashXNeg: 0,
+			SquashYNeg: 0,}));
+	skelly.segments.push(new BodySegment("HipL", 35, 'img/HipL.png', "Torso", false,
+		{
+			PivotX: 51,
+			PivotY: 60,
+			ParentX: 8,
+			ParentY: -50,
+		}, {
+			AngleMax: 0.04,
+			AngleMin: -1.4,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+			SquashXPos: 0,
+			SquashYPos: 0,
+			SquashXNeg: 0,
+			SquashYNeg: 0,
+		}, {
+			Parent: "LegL",
+			Mult: 0.15,
+		}));
+	skelly.segments.push(new BodySegment("HipR", 35, 'img/HipR.png', "Torso", true,
+		{
+			PivotX: 99,
+			PivotY: 60,
+			ParentX: 8,
+			ParentY: -50,
+		}, {
+			AngleMax: 0.04,
+			AngleMin: -1.4,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+			SquashXPos: 0,
+			SquashYPos: 0,
+			SquashXNeg: 0,
+			SquashYNeg: 0,
+		}, {
+			Parent: "LegR",
+			Mult: 0.15,
+		}));
+	skelly.segments.push(new BodySegment("LegL", 40, 'img/LegL.png', "Torso", false,
+		{
+			PivotX: 2,
+			PivotY: 0,
+			ParentX: 8,
+			ParentY: -20,
+		}, {
+			AngleMax: 0.04,
+			AngleMin: -1.4,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+			SquashXPos: 0,
+			SquashYPos: 0,
+			SquashXNeg: 0,
+			SquashYNeg: 0,}));
+	skelly.segments.push(new BodySegment("LegR", 40, 'img/LegR.png', "Torso", true,
+		{
+			PivotX: 92,
+			PivotY: 0,
+			ParentX: 8,
+			ParentY: -20,
+		}, {
+			AngleMax: 0.04,
+			AngleMin: -1.4,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
 			TranslateYNeg: 0,
 			SquashXPos: 0,
 			SquashYPos: 0,
@@ -201,6 +277,7 @@ function LauncherLaunchGame(width, height) {
 	*/
 
 	var currentMode = false;
+	var currentMode2 = false;
 
 	// Listen for animate update
 	app.ticker.add((delta) => {
@@ -213,6 +290,18 @@ function LauncherLaunchGame(width, height) {
 		skelly.get("ArmL").setExtension(extension + change * delta);
 		extension = skelly.get("ArmR").extension;
 		skelly.get("ArmR").setExtension(extension + change * delta);
+		if (extension >= 1) currentMode = true;
+		if (extension <= -1) currentMode = false;
+
+		// Make changes to the skeleton
+		change = 0.005;
+		if (currentMode) change = -0.005;
+		extension = 0;
+
+		extension = skelly.get("LegL").extension;
+		skelly.get("LegL").setExtension(extension + change * delta);
+		extension = skelly.get("LegR").extension;
+		skelly.get("LegR").setExtension(extension + change * delta);
 		if (extension >= 1) currentMode = true;
 		if (extension <= -1) currentMode = false;
 

@@ -242,7 +242,7 @@ class BodySegment {
 	 */
 	get extension() {
 		if (this.Ext && this.segExtensionParent) {
-			this.segExtension = this.segExtensionParent.extension;
+			this.segExtension = this.segExtensionParent.extension * this.Ext.Mult;
 		}
 		return this.segExtension;
 	}
@@ -252,7 +252,7 @@ class BodySegment {
 	 */
 	get extensionAngle() {
 		if (this.Ext && this.segExtensionParent) {
-			this.segExtension = this.segExtensionParent.extension;
+			this.segExtension = this.segExtensionParent.extension * this.Ext.Mult;
 		}
 		let ang = 0;
 		if (this.segExtension > 0) return  (this.Invert ? -1 : 1) * this.Rotation.AngleMax * this.segExtension;
