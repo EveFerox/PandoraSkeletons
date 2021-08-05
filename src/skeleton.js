@@ -66,7 +66,16 @@ class SkeletonContainer {
 		// We also make a temporary renderOrder
 		let tempOrder = [];
 		let pri = new Map();
+		let priTags = new Map();
 		for (let R = 0; R < this.renderOrder.length; R++) {
+			let seg = this.renderOrder[R];
+			pri.set(seg.Name, 0);
+			for (let T = 0; T < this.renderOrder[R].PriorityTag.length; T++) {
+				let tag = seg.PriorityTag[T];
+				let tags = priTags.get(tag);
+				if (!tags) priTags.set(tag, [seg.Name]);
+				else tags.push(seg.Name);
+			}
 			pri.set(this.renderOrder[R].Name, 0);
 			tempOrder.push(this.renderOrder[R]);
 		}
@@ -85,19 +94,36 @@ class SkeletonContainer {
 					let priority = priorities[P];
 					if (!priority.condition || priority.condition(Skeleton))
 					{
-						let currPri = pri.get(seg.Name);
-						let rulePri = pri.get(priority.seg);
-						if (priority.rule == PriorityRule.ABOVE && currPri <= rulePri) {
-							pri.set(seg.Name, currPri + 1);
-							pri.set(priority.seg, rulePri - 1);
-							adjusted = true;
-							break; // To make sure each object moves at most 1 per step
-						} else if (priority.rule == PriorityRule.BELOW && currPri >= rulePri) {
-							pri.set(seg.Name, currPri - 1);
-							pri.set(priority.seg, rulePri + 1);
-							adjusted = true;
-							break; // To make sure each object moves at most 1 per step
+						let searchNames = [];
+						if (pri.get(priority.seg) != null) searchNames.push(priority.seg);
+						else {
+							let tags = priTags.get(priority.seg);
+							if (tags != null) {
+								for (let T = 0; T < tags.length; T++) {
+									searchNames.push(tags[T]);
+								}
+							}
 						}
+
+
+						for (let SN = 0; SN < searchNames.length; SN++) {
+							let searchName = searchNames[SN];
+
+							let currPri = pri.get(seg.Name);
+							let rulePri = pri.get(searchName);
+							if (priority.rule == PriorityRule.ABOVE && currPri <= rulePri) {
+								pri.set(seg.Name, currPri + 1);
+								pri.set(searchName, rulePri - 1);
+								adjusted = true;
+								break; // To make sure each object moves at most 1 per step
+							} else if (priority.rule == PriorityRule.BELOW && currPri >= rulePri) {
+								pri.set(seg.Name, currPri - 1);
+								pri.set(searchName, rulePri + 1);
+								adjusted = true;
+								break; // To make sure each object moves at most 1 per step
+							}
+						}
+
 					}
 				}
 			}
@@ -105,9 +131,11 @@ class SkeletonContainer {
 			tempOrder.sort((a, b) => {return pri.get(a.Name) - pri.get(b.Name)});
 			iterations++;
 		}
-		if (iterations == iterationMax) console.log("Warning: Cycle detected!!!");
-		else this.renderOrder = tempOrder;
-		console.log(pri);
+		if (iterations == iterationMax) {
+			console.log("Warning: Cycle detected!!! If this is unexpected, please report as a bug and provide the items being worn");
+			return false;
+		} else this.renderOrder = tempOrder;
+		return true;
 	}
 
 	/**
@@ -212,6 +240,10 @@ class BodySegment {
 	 * @type {{ rule : PriorityRule, seg: string, condition: null | function }[]}
 	 */
 	Priority;
+	/**
+	 * @type {string[]}
+	 */
+	PriorityTag;
 	Path;
 	Parent;
 	Pos;
@@ -231,7 +263,8 @@ class BodySegment {
 	/**
 	 * A segment for use in Pandora characters
 	 * @param {string} Name - Name of the segment
-	 * @param {float} Priority - Render priority
+	 * @param {{ rule : PriorityRule, seg: string, condition: null | function }[]} Priority - Render priority
+	 * @param {string[]} PriorityTag - Render priority tag for grouping (e.g arm, or panties)
 	 * @param {string} Path - Location of the sprite for this segment
 	 * @param {string} Parent - Parent of the segment, which the segment is attached to and rotates with. If null, it will be the torso
 	 * @param {boolean} Invert - All rotation/translation/positions are mirrored on the x axis, but still referenced as positive. You give this to the limbs on the opposite side of the body and all the other values stay the same
@@ -260,9 +293,10 @@ class BodySegment {
 	 * @param {dict} Weight.Mult - a dict {} containing names of params and how much they are multiplied by based on the weight property assigned to the character body
 	 * @param {dict} Weight.Offset - a dict {} containing names of params and how much they are offset by based on the weight property assigned to the character body
 	 */
-	constructor(Name, Priority, Path, Parent, Invert, Pos, Rotation, Ext, Weight) {
+	constructor(Name, Priority, PriorityTag, Path, Parent, Invert, Pos, Rotation, Ext, Weight) {
 		this.Name = Name;
 		this.Priority = Priority;
+		this.PriorityTag = PriorityTag;
 		this.Path = Path;
 		this.Parent = Parent;
 		this.Invert = Invert;

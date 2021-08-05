@@ -16,6 +16,7 @@ function LauncherLaunchGame(width, height) {
 	skelly.segments.push(new BodySegment(
 		"Torso", // Name
 		[], // Priority
+		["Torso"], // PriorityTag
 		'img/Body.png', // Path
 		"", // Parent
 		false, // Invert
@@ -40,6 +41,7 @@ function LauncherLaunchGame(width, height) {
 		[
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 		], // Priority
+		["Arms", "UpperArms"], // PriorityTag
 		'img/ShoulderL.png', // Path
 		"Torso", // Parent
 		false, // Invert
@@ -68,6 +70,7 @@ function LauncherLaunchGame(width, height) {
 		[
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 		], // Priority
+		["Arms", "UpperArms"], // PriorityTag
 		'img/ShoulderR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -97,6 +100,7 @@ function LauncherLaunchGame(width, height) {
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 			{rule: PriorityRule.ABOVE, seg: "ShoulderL"},
 		], // Priority
+		["Arms", "UpperArms"], // PriorityTag
 		'img/ArmL.png', // Path
 		"Torso", // Parent
 		false, // Invert
@@ -122,6 +126,7 @@ function LauncherLaunchGame(width, height) {
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 			{rule: PriorityRule.ABOVE, seg: "ShoulderR"},
 		], // Priority
+		["Arms", "UpperArms"], // PriorityTag
 		'img/ArmR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -147,6 +152,7 @@ function LauncherLaunchGame(width, height) {
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 			{rule: PriorityRule.ABOVE, seg: "ArmL"},
 		], // Priority
+		["Arms", "ForeArms"], // PriorityTag
 		'img/ForeArmL.png', // Path
 		"ArmL", // Parent
 		false, // Invert
@@ -174,6 +180,7 @@ function LauncherLaunchGame(width, height) {
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 			{rule: PriorityRule.ABOVE, seg: "ArmR"},
 		], // Priority
+		["Arms", "ForeArms"], // PriorityTag
 		'img/ForeArmR.png', // Path
 		"ArmR", // Parent
 		true, // Invert
@@ -201,6 +208,7 @@ function LauncherLaunchGame(width, height) {
 			{rule: PriorityRule.ABOVE, seg: "Torso"},
 			{rule: PriorityRule.ABOVE, seg: "ArmL"},
 		], // Priority
+		["Arms", "ForeArms"], // PriorityTag
 		'img/ForeArmL_back.png', // Path
 		"ArmL", // Parent
 		false, // Invert
@@ -231,6 +239,7 @@ function LauncherLaunchGame(width, height) {
 			{rule: PriorityRule.ABOVE, seg: "Torso"},
 			{rule: PriorityRule.ABOVE, seg: "ArmR"},
 		], // Priority
+		["Arms", "ForeArms"], // PriorityTag
 		'img/ForeArmR_back.png', // Path
 		"ArmR", // Parent
 		true, // Invert
@@ -261,6 +270,7 @@ function LauncherLaunchGame(width, height) {
 			{rule: PriorityRule.ABOVE, seg: "Torso"},
 			{rule: PriorityRule.ABOVE, seg: "ArmL"},
 		], // Priority
+		["Arms", "ForeArms"], // PriorityTag
 		'img/ForeArmL_front.png', // Path
 		"ArmL", // Parent
 		false, // Invert
@@ -291,6 +301,7 @@ function LauncherLaunchGame(width, height) {
 			{rule: PriorityRule.ABOVE, seg: "Torso"},
 			{rule: PriorityRule.ABOVE, seg: "ArmR"},
 		], // Priority
+		["Arms", "ForeArms"], // PriorityTag
 		'img/ForeArmR_front.png', // Path
 		"ArmR", // Parent
 		true, // Invert
@@ -320,6 +331,7 @@ function LauncherLaunchGame(width, height) {
 		[
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 		], // Priority
+		["Legs", "Thighs"], // PriorityTag
 		'img/HipL.png', // Path
 		"Torso", // Parent
 		false, // Invert
@@ -348,6 +360,7 @@ function LauncherLaunchGame(width, height) {
 		[
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 		], // Priority
+		["Legs", "Thighs"], // PriorityTag
 		'img/HipR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -377,6 +390,7 @@ function LauncherLaunchGame(width, height) {
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 			{rule: PriorityRule.ABOVE, seg: "HipL"},
 		], // Priority
+		["Legs", "Thighs"], // PriorityTag
 		'img/LegL.png', // Path
 		"Torso", // Parent
 		false, // Invert
@@ -402,6 +416,7 @@ function LauncherLaunchGame(width, height) {
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 			{rule: PriorityRule.ABOVE, seg: "HipR"},
 		], // Priority
+		["Legs", "Thighs"], // PriorityTag
 		'img/LegR.png', // Path
 		"Torso", // Parent
 		true, // Invert
