@@ -77,10 +77,13 @@ class SkeletonContainer {
 
 			if (seg.Rotation.hideExtAbove && seg.extension > seg.Rotation.hideExtAbove) {
 				segContainer.children[0].visible = false;
+				seg.visible = false;
 			} else if (seg.Rotation.hideExtBelow && seg.extension <= seg.Rotation.hideExtBelow) {
 				segContainer.children[0].visible = false;
+				seg.visible = false;
 			} else {
 				segContainer.children[0].visible = true;
+				seg.visible = true;
 			}
 		}
 	}
@@ -143,6 +146,7 @@ class BodySegment {
 
 	currentX = 0;
 	currentY = 0;
+	visible = true;
 
 	segParent = null;
 	segExtensionParent = null;

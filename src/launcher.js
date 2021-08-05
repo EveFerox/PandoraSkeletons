@@ -114,7 +114,7 @@ function LauncherLaunchGame(width, height) {
 			ParentY: -17,
 		}, {
 			AngleMax: 1.6,
-			AngleMin: 0,
+			AngleMin: -2,
 			TranslateXPos: 21,
 			TranslateYPos: 7,
 			TranslateXNeg: 0,
@@ -123,7 +123,8 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-			hideExtAbove: 0.1}));
+			hideExtAbove: 0.1,
+			hideExtBelow: -0.1,}));
 	skelly.segments.push(new BodySegment("ForeArmR", 45, 'img/ForeArmR.png', "ArmR", true,
 		{
 			PivotX: 236,
@@ -132,7 +133,7 @@ function LauncherLaunchGame(width, height) {
 			ParentY: -17,
 		}, {
 			AngleMax: 1.6,
-			AngleMin: 0,
+			AngleMin: -2,
 			TranslateXPos: 0,
 			TranslateYPos: 0,
 			TranslateXNeg: 0,
@@ -141,7 +142,8 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-			hideExtAbove: 0.1,}));
+			hideExtAbove: 0.1,
+			hideExtBelow: -0.1,}));
 	skelly.segments.push(new BodySegment("ForeArmL_back", 140, 'img/ForeArmL_back.png', "ArmL", false,
 		{
 			PivotX: 4,
@@ -173,8 +175,8 @@ function LauncherLaunchGame(width, height) {
 		}, {
 			AngleMax: 1.6,
 			AngleMin: 0,
-			TranslateXPos: 0,
-			TranslateYPos: 0,
+			TranslateXPos: 21,
+			TranslateYPos: 7,
 			TranslateXNeg: 0,
 			TranslateYNeg: 0,
 			SquashXPos: 0,
@@ -182,6 +184,50 @@ function LauncherLaunchGame(width, height) {
 			SquashXNeg: 0,
 			SquashYNeg: 0,
 			hideExtBelow: 0.1,
+		}, {
+			Parent: "ForeArmR",
+			Mult: 1,
+		}));
+		skelly.segments.push(new BodySegment("ForeArmL_front", 140, 'img/ForeArmL_front.png', "ArmL", false,
+		{
+			PivotX: 4,
+			PivotY: 61,
+			ParentX: 132,
+			ParentY: -13,
+		}, {
+			AngleMax: 0,
+			AngleMin: -2,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 14,
+			SquashXPos: 0,
+			SquashYPos: 0,
+			SquashXNeg: 0,
+			SquashYNeg: 0,
+			hideExtAbove: -0.1,
+		}, {
+			Parent: "ForeArmL",
+			Mult: 1,
+		}));
+	skelly.segments.push(new BodySegment("ForeArmR_front", 140, 'img/ForeArmR_front.png', "ArmR", true,
+		{
+			PivotX: 196,
+			PivotY: 61,
+			ParentX: 132,
+			ParentY: -13,
+		}, {
+			AngleMax: 0,
+			AngleMin: -2,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 14,
+			SquashXPos: 0,
+			SquashYPos: 0,
+			SquashXNeg: 0,
+			SquashYNeg: 0,
+			hideExtAbove: -0.1,
 		}, {
 			Parent: "ForeArmR",
 			Mult: 1,
@@ -380,8 +426,8 @@ function LauncherLaunchGame(width, height) {
 
 		extension = skelly.get("ForeArmL").extension;
 		skelly.get("ForeArmL").setExtension(extension + change * delta);
-		//extension = skelly.get("ForeArmR").extension;
-		//skelly.get("ForeArmR").setExtension(extension + change * delta);
+		extension = skelly.get("ForeArmR").extension;
+		skelly.get("ForeArmR").setExtension(extension - change * delta);
 
 		if (extension >= 1) currentMode3 = true;
 		if (extension <= -1) currentMode3 = false;
