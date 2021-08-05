@@ -28,7 +28,7 @@ class SkeletonContainer {
 			let segContainer = this.containers[seg.Name];
 
 			if (seg.Parent)
-				this.containers[seg.Parent].addChild(segContainer);
+				this.container.addChild(segContainer);
 
 			const sprite = new PIXI.Sprite(PIXI.Texture.from(seg.Path));
 			sprite.x = -seg.Pos.PivotX;
@@ -43,11 +43,12 @@ class SkeletonContainer {
 	}
 
 	updateExtension() {
+
 		for (let S = 0; S < this.renderOrder.length; S++) {
 			let seg = this.renderOrder[S];
 			let segContainer = this.containers[seg.Name];
 
-			segContainer.rotation = seg.extensionAngle;
+			segContainer.rotation = seg.extensionAngleAbsolute;
 
 			if (segContainer != this.container) { // We dont move the main container
 				let xoffset = 0;
@@ -61,8 +62,25 @@ class SkeletonContainer {
 					yoffset = seg.Rotation.TranslateYNeg ? -seg.Rotation.TranslateYNeg * seg.extension : 0;
 				}
 
-				segContainer.x = (seg.Pos.ParentX + xoffset) * (seg.Invert ? -1 : 1);
-				segContainer.y = seg.Pos.ParentY + yoffset;
+				let xx = (seg.Invert ? -1 : 1) * (seg.Pos.ParentX + xoffset);
+				let yy = seg.Pos.ParentY + yoffset;
+				seg.currentX = seg.segParent.currentX
+								+ xx * Math.cos(seg.segParent.extensionAngleAbsolute)
+								- yy * Math.sin(seg.segParent.extensionAngleAbsolute);
+				seg.currentY = seg.segParent.currentY
+								+ xx * Math.sin(seg.segParent.extensionAngleAbsolute)
+								+ yy * Math.cos(seg.segParent.extensionAngleAbsolute);
+
+				segContainer.x = seg.currentX;
+				segContainer.y = seg.currentY;
+			}
+
+			if (seg.Rotation.hideExtAbove && seg.extension > seg.Rotation.hideExtAbove) {
+				segContainer.children[0].visible = false;
+			} else if (seg.Rotation.hideExtBelow && seg.extension <= seg.Rotation.hideExtBelow) {
+				segContainer.children[0].visible = false;
+			} else {
+				segContainer.children[0].visible = true;
 			}
 		}
 	}
@@ -123,6 +141,9 @@ class BodySegment {
 	Ext = null;
 	Weight = null;
 
+	currentX = 0;
+	currentY = 0;
+
 	segParent = null;
 	segExtensionParent = null;
 	segChildren = [];
@@ -151,6 +172,8 @@ class BodySegment {
 	 * @param {float} Rotation.SquashYPos - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
 	 * @param {float} Rotation.SquashXNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
 	 * @param {float} Rotation.SquashYNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
+	 * @param {float} Rotation.hideExtAbove - Hides this bodypart when extension is higher
+	 * @param {float} Rotation.hideExtBelow - Hides this bodypart when extension is higher
 	 * @param {} Ext - OPTIONAL extension parents for non-free segments
 	 * @param {string} Ext.Parent - if Ext is null, this is a free rotating segment. If specified, this will not freely rotate but the extension (percentage of min/max angle) will be copied from the specified segment
 	 * @param {string} Ext.Mult - multiplier for the extension parent. Basically if this is set to 0.75 and the extension parent is the arm, then this will rotate at 75% of the rate that the arm does. Good for shoulders
@@ -250,13 +273,22 @@ class BodySegment {
 	 * Gets the current extension as an angle
 	 * @returns {float} - Extension converted to angle
 	 */
-	get extensionAngle() {
+	 get extensionAngle() {
 		if (this.Ext && this.segExtensionParent) {
 			this.segExtension = this.segExtensionParent.extension * this.Ext.Mult;
 		}
 		let ang = 0;
 		if (this.segExtension > 0) return  (this.Invert ? -1 : 1) * this.Rotation.AngleMax * this.segExtension;
 		else return (this.Invert ? 1 : -1) * this.Rotation.AngleMin * this.segExtension;
+	}
+	/**
+	 * Gets the absolute extension as an angle
+	 * @returns {float} - Extension converted to angle
+	 */
+	 get extensionAngleAbsolute() {
+		let ang = this.extensionAngle;
+		if (this.segParent) ang += this.segParent.extensionAngle;
+		return ang;
 	}
 
 	/**
