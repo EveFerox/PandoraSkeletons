@@ -15,7 +15,7 @@ function LauncherLaunchGame(width, height) {
 	skelly = new BodySkeleton();
 	skelly.segments.push(new BodySegment(
 		"Torso", // Name
-		100, // Priority
+		[], // Priority
 		'img/Body.png', // Path
 		"", // Parent
 		false, // Invert
@@ -65,7 +65,9 @@ function LauncherLaunchGame(width, height) {
 		}));
 	skelly.segments.push(new BodySegment(
 		"ShoulderR", // Name
-		40, // Priority
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+		], // Priority
 		'img/ShoulderR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -91,7 +93,10 @@ function LauncherLaunchGame(width, height) {
 		}));
 	skelly.segments.push(new BodySegment(
 		"ArmL", // Name
-		43, // Priority
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "ShoulderL"},
+		], // Priority
 		'img/ArmL.png', // Path
 		"Torso", // Parent
 		false, // Invert
@@ -113,7 +118,10 @@ function LauncherLaunchGame(width, height) {
 			SquashYNeg: 0,}));
 	skelly.segments.push(new BodySegment(
 		"ArmR", // Name
-		43, // Priority
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "ShoulderR"},
+		], // Priority
 		'img/ArmR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -135,7 +143,10 @@ function LauncherLaunchGame(width, height) {
 			SquashYNeg: 0,}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmL", // Name
-		45, // Priority
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "ArmL"},
+		], // Priority
 		'img/ForeArmL.png', // Path
 		"ArmL", // Parent
 		false, // Invert
@@ -155,11 +166,14 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-			hideExtAbove: 0.1,
-			hideExtBelow: -0.1,}));
+			hideExtAbove: 0.3,
+			hideExtBelow: -0.3,}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmR", // Name
-		45, // Priority
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "ArmR"},
+		], // Priority
 		'img/ForeArmR.png', // Path
 		"ArmR", // Parent
 		true, // Invert
@@ -179,11 +193,14 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-			hideExtAbove: 0.1,
-			hideExtBelow: -0.1,}));
+			hideExtAbove: 0.3,
+			hideExtBelow: -0.3,}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmL_back", // Name
-		140, // Priority
+		[
+			{rule: PriorityRule.ABOVE, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "ArmL"},
+		], // Priority
 		'img/ForeArmL_back.png', // Path
 		"ArmL", // Parent
 		false, // Invert
@@ -203,14 +220,17 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-			hideExtBelow: 0.1
+			hideExtBelow: 0.3
 		}, {
 			Parent: "ForeArmL",
 			Mult: 1,
 		}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmR_back", // Name
-		140, // Priority
+		[
+			{rule: PriorityRule.ABOVE, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "ArmR"},
+		], // Priority
 		'img/ForeArmR_back.png', // Path
 		"ArmR", // Parent
 		true, // Invert
@@ -230,14 +250,17 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-			hideExtBelow: 0.1,
+			hideExtBelow: 0.3,
 		}, {
 			Parent: "ForeArmR",
 			Mult: 1,
 		}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmL_front", // Name
-		140, // Priority
+		[
+			{rule: PriorityRule.ABOVE, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "ArmL"},
+		], // Priority
 		'img/ForeArmL_front.png', // Path
 		"ArmL", // Parent
 		false, // Invert
@@ -257,14 +280,17 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-			hideExtAbove: -0.1,
+			hideExtAbove: -0.3,
 		}, {
 			Parent: "ForeArmL",
 			Mult: 1,
 		}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmR_front", // Name
-		140, // Priority
+		[
+			{rule: PriorityRule.ABOVE, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "ArmR"},
+		], // Priority
 		'img/ForeArmR_front.png', // Path
 		"ArmR", // Parent
 		true, // Invert
@@ -284,14 +310,16 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-			hideExtAbove: -0.1,
+			hideExtAbove: -0.3,
 		}, {
 			Parent: "ForeArmR",
 			Mult: 1,
 		}));
 	skelly.segments.push(new BodySegment(
 		"HipL", // Name
-		50, // Priority
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+		], // Priority
 		'img/HipL.png', // Path
 		"Torso", // Parent
 		false, // Invert
@@ -317,7 +345,9 @@ function LauncherLaunchGame(width, height) {
 		}));
 	skelly.segments.push(new BodySegment(
 		"HipR", // Name
-		50, // Priority
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+		], // Priority
 		'img/HipR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -343,7 +373,10 @@ function LauncherLaunchGame(width, height) {
 		}));
 	skelly.segments.push(new BodySegment(
 		"LegL", // Name
-		60, // Priority
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "HipL"},
+		], // Priority
 		'img/LegL.png', // Path
 		"Torso", // Parent
 		false, // Invert
@@ -365,7 +398,10 @@ function LauncherLaunchGame(width, height) {
 			SquashYNeg: 0,}));
 	skelly.segments.push(new BodySegment(
 		"LegR", // Name
-		60, // Priority
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "HipR"},
+		], // Priority
 		'img/LegR.png', // Path
 		"Torso", // Parent
 		true, // Invert

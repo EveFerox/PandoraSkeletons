@@ -6,8 +6,18 @@ var PriorityRule = {
 };
 
 class SkeletonContainer {
+	/**
+	 * @type {PIXI.Container}
+	 */
 	container = null;
+
+	/**
+	 * @type {Object.<string, PIXI.container>}
+	 */
 	containers = {};
+	/**
+	 * @type {BodySegment}
+	 */
 	renderOrder = [];
 
 	/**
@@ -26,7 +36,7 @@ class SkeletonContainer {
 
 		this.container = this.containers[Skeleton.head.Name];
 
-		this.renderOrder.sort((a, b) => {return (typeof a.Priority === "number") ? a.Priority - b.Priority : -1;});
+		this.sortRenderOrder(Skeleton);
 
 		for (let S = 0; S < this.renderOrder.length; S++) {
 			let seg = this.renderOrder[S];
@@ -47,6 +57,62 @@ class SkeletonContainer {
 
 	}
 
+	/**
+	 * Algorithm to sort the current render order
+	 * @param {BodySkeleton} Skeleton - The skeleton for this container
+	 */
+	sortRenderOrder(Skeleton) {
+		// We start by creating a map with the dynamic priority of all objects
+		// We also make a temporary renderOrder
+		let tempOrder = [];
+		let pri = new Map();
+		for (let R = 0; R < this.renderOrder.length; R++) {
+			pri.set(this.renderOrder[R].Name, 0);
+			tempOrder.push(this.renderOrder[R]);
+		}
+
+		// Next we start an iteration where we migrate things to follow rules and then sort
+		let iterations = 0;
+		let iterationMax = 10;
+		let adjusted = true;
+		while (iterations < iterationMax && adjusted) {
+			adjusted = false;
+			for (let R = 0; R < tempOrder.length; R++) {
+				let seg = tempOrder[R];
+				let priorities = seg.Priority;
+
+				for (let P = 0; P < priorities.length; P++) {
+					let priority = priorities[P];
+					if (!priority.condition || priority.condition(Skeleton))
+					{
+						let currPri = pri.get(seg.Name);
+						let rulePri = pri.get(priority.seg);
+						if (priority.rule == PriorityRule.ABOVE && currPri <= rulePri) {
+							pri.set(seg.Name, currPri + 1);
+							pri.set(priority.seg, rulePri - 1);
+							adjusted = true;
+							break; // To make sure each object moves at most 1 per step
+						} else if (priority.rule == PriorityRule.BELOW && currPri >= rulePri) {
+							pri.set(seg.Name, currPri - 1);
+							pri.set(priority.seg, rulePri + 1);
+							adjusted = true;
+							break; // To make sure each object moves at most 1 per step
+						}
+					}
+				}
+			}
+
+			tempOrder.sort((a, b) => {return pri.get(a.Name) - pri.get(b.Name)});
+			iterations++;
+		}
+		if (iterations == iterationMax) console.log("Warning: Cycle detected!!!");
+		else this.renderOrder = tempOrder;
+		console.log(pri);
+	}
+
+	/**
+	 * Algorithm to update all item extensions and their respective graphics objects
+	 */
 	updateExtension() {
 
 		for (let S = 0; S < this.renderOrder.length; S++) {
@@ -141,6 +207,10 @@ class BodySkeleton {
 
 class BodySegment {
 	Name;
+
+	/**
+	 * @type {{ rule : PriorityRule, seg: string, condition: null | function }[]}
+	 */
 	Priority;
 	Path;
 	Parent;
