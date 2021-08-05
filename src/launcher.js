@@ -13,7 +13,12 @@ function LauncherLaunchGame(width, height) {
 	document.body.appendChild(app.view);
 
 	skelly = new BodySkeleton();
-	skelly.segments.push(new BodySegment("Torso", 100, 'img/Body.png', "", false,
+	skelly.segments.push(new BodySegment(
+		"Torso", // Name
+		100, // Priority
+		'img/Body.png', // Path
+		"", // Parent
+		false, // Invert
 		{
 			PivotX: 500,
 			PivotY: 500,
@@ -30,7 +35,14 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,}));
-	skelly.segments.push(new BodySegment("ShoulderL", 40, 'img/ShoulderL.png', "Torso", false,
+	skelly.segments.push(new BodySegment(
+		"ShoulderL", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+		], // Priority
+		'img/ShoulderL.png', // Path
+		"Torso", // Parent
+		false, // Invert
 		{
 			PivotX: 70,
 			PivotY: 70,
@@ -39,10 +51,10 @@ function LauncherLaunchGame(width, height) {
 		}, {
 			AngleMax: 1.45,
 			AngleMin: -0.75,
-			TranslateXPos: 0,
+			TranslateXPos: -5,
 			TranslateYPos: 0,
 			TranslateXNeg: 0,
-			TranslateYNeg: 0,
+			TranslateYNeg: -5,
 			SquashXPos: 0,
 			SquashYPos: 0,
 			SquashXNeg: 0,
@@ -51,7 +63,12 @@ function LauncherLaunchGame(width, height) {
 			Parent: "ArmR",
 			Mult: 1,
 		}));
-	skelly.segments.push(new BodySegment("ShoulderR", 40, 'img/ShoulderR.png', "Torso", true,
+	skelly.segments.push(new BodySegment(
+		"ShoulderR", // Name
+		40, // Priority
+		'img/ShoulderR.png', // Path
+		"Torso", // Parent
+		true, // Invert
 		{
 			PivotX: 70,
 			PivotY: 70,
@@ -60,10 +77,10 @@ function LauncherLaunchGame(width, height) {
 		}, {
 			AngleMax: 1.45,
 			AngleMin: -0.75,
-			TranslateXPos: 0,
+			TranslateXPos: -5,
 			TranslateYPos: 0,
 			TranslateXNeg: 0,
-			TranslateYNeg: 0,
+			TranslateYNeg: -5,
 			SquashXPos: 0,
 			SquashYPos: 0,
 			SquashXNeg: 0,
@@ -72,14 +89,19 @@ function LauncherLaunchGame(width, height) {
 			Parent: "ArmR",
 			Mult: 1,
 		}));
-	skelly.segments.push(new BodySegment("ArmL", 45, 'img/ArmL.png', "Torso", false,
+	skelly.segments.push(new BodySegment(
+		"ArmL", // Name
+		43, // Priority
+		'img/ArmL.png', // Path
+		"Torso", // Parent
+		false, // Invert
 		{
 			PivotX: 0,
 			PivotY: 30,
 			ParentX: 60,
 			ParentY: -275,
 		}, {
-			AngleMax: 1.7,
+			AngleMax: 1.65,
 			AngleMin: -1,
 			TranslateXPos: 15,
 			TranslateYPos: 0,
@@ -89,14 +111,19 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,}));
-	skelly.segments.push(new BodySegment("ArmR", 45, 'img/ArmR.png', "Torso", true,
+	skelly.segments.push(new BodySegment(
+		"ArmR", // Name
+		43, // Priority
+		'img/ArmR.png', // Path
+		"Torso", // Parent
+		true, // Invert
 		{
 			PivotX: 340,
 			PivotY: 30,
 			ParentX: 60,
 			ParentY: -275,
 		}, {
-			AngleMax: 1.7,
+			AngleMax: 1.65,
 			AngleMin: -1,
 			TranslateXPos: 15,
 			TranslateYPos: 0,
@@ -106,7 +133,12 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,}));
-	skelly.segments.push(new BodySegment("ForeArmL", 45, 'img/ForeArmL.png', "ArmL", false,
+	skelly.segments.push(new BodySegment(
+		"ForeArmL", // Name
+		45, // Priority
+		'img/ForeArmL.png', // Path
+		"ArmL", // Parent
+		false, // Invert
 		{
 			PivotX: 4,
 			PivotY: 16,
@@ -125,7 +157,12 @@ function LauncherLaunchGame(width, height) {
 			SquashYNeg: 0,
 			hideExtAbove: 0.1,
 			hideExtBelow: -0.1,}));
-	skelly.segments.push(new BodySegment("ForeArmR", 45, 'img/ForeArmR.png', "ArmR", true,
+	skelly.segments.push(new BodySegment(
+		"ForeArmR", // Name
+		45, // Priority
+		'img/ForeArmR.png', // Path
+		"ArmR", // Parent
+		true, // Invert
 		{
 			PivotX: 236,
 			PivotY: 16,
@@ -144,7 +181,12 @@ function LauncherLaunchGame(width, height) {
 			SquashYNeg: 0,
 			hideExtAbove: 0.1,
 			hideExtBelow: -0.1,}));
-	skelly.segments.push(new BodySegment("ForeArmL_back", 140, 'img/ForeArmL_back.png', "ArmL", false,
+	skelly.segments.push(new BodySegment(
+		"ForeArmL_back", // Name
+		140, // Priority
+		'img/ForeArmL_back.png', // Path
+		"ArmL", // Parent
+		false, // Invert
 		{
 			PivotX: 4,
 			PivotY: 61,
@@ -166,7 +208,12 @@ function LauncherLaunchGame(width, height) {
 			Parent: "ForeArmL",
 			Mult: 1,
 		}));
-	skelly.segments.push(new BodySegment("ForeArmR_back", 140, 'img/ForeArmR_back.png', "ArmR", true,
+	skelly.segments.push(new BodySegment(
+		"ForeArmR_back", // Name
+		140, // Priority
+		'img/ForeArmR_back.png', // Path
+		"ArmR", // Parent
+		true, // Invert
 		{
 			PivotX: 196,
 			PivotY: 61,
@@ -188,7 +235,12 @@ function LauncherLaunchGame(width, height) {
 			Parent: "ForeArmR",
 			Mult: 1,
 		}));
-		skelly.segments.push(new BodySegment("ForeArmL_front", 140, 'img/ForeArmL_front.png', "ArmL", false,
+	skelly.segments.push(new BodySegment(
+		"ForeArmL_front", // Name
+		140, // Priority
+		'img/ForeArmL_front.png', // Path
+		"ArmL", // Parent
+		false, // Invert
 		{
 			PivotX: 4,
 			PivotY: 61,
@@ -210,7 +262,12 @@ function LauncherLaunchGame(width, height) {
 			Parent: "ForeArmL",
 			Mult: 1,
 		}));
-	skelly.segments.push(new BodySegment("ForeArmR_front", 140, 'img/ForeArmR_front.png', "ArmR", true,
+	skelly.segments.push(new BodySegment(
+		"ForeArmR_front", // Name
+		140, // Priority
+		'img/ForeArmR_front.png', // Path
+		"ArmR", // Parent
+		true, // Invert
 		{
 			PivotX: 196,
 			PivotY: 61,
@@ -232,7 +289,12 @@ function LauncherLaunchGame(width, height) {
 			Parent: "ForeArmR",
 			Mult: 1,
 		}));
-	skelly.segments.push(new BodySegment("HipL", 50, 'img/HipL.png', "Torso", false,
+	skelly.segments.push(new BodySegment(
+		"HipL", // Name
+		50, // Priority
+		'img/HipL.png', // Path
+		"Torso", // Parent
+		false, // Invert
 		{
 			PivotX: 51,
 			PivotY: 60,
@@ -253,7 +315,12 @@ function LauncherLaunchGame(width, height) {
 			Parent: "LegL",
 			Mult: 0.15,
 		}));
-	skelly.segments.push(new BodySegment("HipR", 50, 'img/HipR.png', "Torso", true,
+	skelly.segments.push(new BodySegment(
+		"HipR", // Name
+		50, // Priority
+		'img/HipR.png', // Path
+		"Torso", // Parent
+		true, // Invert
 		{
 			PivotX: 99,
 			PivotY: 60,
@@ -274,7 +341,12 @@ function LauncherLaunchGame(width, height) {
 			Parent: "LegR",
 			Mult: 0.15,
 		}));
-	skelly.segments.push(new BodySegment("LegL", 60, 'img/LegL.png', "Torso", false,
+	skelly.segments.push(new BodySegment(
+		"LegL", // Name
+		60, // Priority
+		'img/LegL.png', // Path
+		"Torso", // Parent
+		false, // Invert
 		{
 			PivotX: 2,
 			PivotY: 0,
@@ -291,7 +363,12 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,}));
-	skelly.segments.push(new BodySegment("LegR", 60, 'img/LegR.png', "Torso", true,
+	skelly.segments.push(new BodySegment(
+		"LegR", // Name
+		60, // Priority
+		'img/LegR.png', // Path
+		"Torso", // Parent
+		true, // Invert
 		{
 			PivotX: 92,
 			PivotY: 0,

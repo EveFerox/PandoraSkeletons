@@ -1,5 +1,10 @@
 "use strict";
 
+var PriorityRule = {
+	ABOVE: true,
+	BELOW: false,
+};
+
 class SkeletonContainer {
 	container = null;
 	containers = {};
@@ -21,7 +26,7 @@ class SkeletonContainer {
 
 		this.container = this.containers[Skeleton.head.Name];
 
-		this.renderOrder.sort((a, b) => {return a.Priority - b.Priority;});
+		this.renderOrder.sort((a, b) => {return (typeof a.Priority === "number") ? a.Priority - b.Priority : -1;});
 
 		for (let S = 0; S < this.renderOrder.length; S++) {
 			let seg = this.renderOrder[S];
