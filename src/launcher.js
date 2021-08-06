@@ -1009,6 +1009,8 @@ function LauncherLaunchGame(width, height) {
 	var currentMode = false;
 	var currentMode2 = false;
 	var currentMode3 = false;
+	let switchtimer = 0;
+	let switchtimerMax = 60;
 
 	// Listen for animate update
 	app.ticker.add((delta) => {
@@ -1050,7 +1052,19 @@ function LauncherLaunchGame(width, height) {
 		if (extension >= 1) currentMode2 = true;
 		if (extension <= -1) currentMode2 = false;
 
-
+		switchtimer += delta;
+		if (switchtimer > switchtimerMax) {
+			switchtimer = 0;
+			if (Math.random() < 0.25) {
+				skelly.PoseTags = [PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT];
+			} else if (Math.random() < 0.33) {
+				skelly.PoseTags = [PoseTag.FIST_RIGHT, PoseTag.FIST_LEFT];
+			} else if (Math.random() < 0.5) {
+				skelly.PoseTags = [PoseTag.KNEELING_RIGHT, PoseTag.KNEELING_LEFT];
+			} else {
+				skelly.PoseTags = [];
+			}
+		}
 
 
 		// update all graphics to represent changes to skeletons
