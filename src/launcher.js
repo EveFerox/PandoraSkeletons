@@ -61,8 +61,8 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-		}, {
-			Parent: "ArmR",
+		}, null, {
+			Parent: "ArmL",
 			Mult: 1,
 		}));
 	skelly.segments.push(new BodySegment(
@@ -90,7 +90,7 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-		}, {
+		}, null, {
 			Parent: "ArmR",
 			Mult: 1,
 		}));
@@ -150,7 +150,6 @@ function LauncherLaunchGame(width, height) {
 		"ForeArmL", // Name
 		[
 			{rule: PriorityRule.BELOW, seg: "Torso"},
-			{rule: PriorityRule.ABOVE, seg: "ArmL"},
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
 		'img/ForeArmL.png', // Path
@@ -162,7 +161,7 @@ function LauncherLaunchGame(width, height) {
 			ParentX: 132,
 			ParentY: -17,
 		}, {
-			AngleMax: 1.6,
+			AngleMax: 1.7,
 			AngleMin: -2,
 			TranslateXPos: 21,
 			TranslateYPos: 7,
@@ -190,7 +189,7 @@ function LauncherLaunchGame(width, height) {
 			ParentX: 132,
 			ParentY: -17,
 		}, {
-			AngleMax: 1.6,
+			AngleMax: 1.7,
 			AngleMin: -2,
 			TranslateXPos: 0,
 			TranslateYPos: 0,
@@ -205,7 +204,8 @@ function LauncherLaunchGame(width, height) {
 	skelly.segments.push(new BodySegment(
 		"ForeArmL_back", // Name
 		[
-			{rule: PriorityRule.ABOVE, seg: "Torso"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDSBEHINDBACK);}},
+			{rule: PriorityRule.ABOVE, seg: "Torso", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDSBEHINDBACK);}},
 			{rule: PriorityRule.ABOVE, seg: "ArmL"},
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
@@ -218,7 +218,7 @@ function LauncherLaunchGame(width, height) {
 			ParentX: 132,
 			ParentY: -17,
 		}, {
-			AngleMax: 1.6,
+			AngleMax: 1.7,
 			AngleMin: 0,
 			TranslateXPos: 21,
 			TranslateYPos: 7,
@@ -229,14 +229,15 @@ function LauncherLaunchGame(width, height) {
 			SquashXNeg: 0,
 			SquashYNeg: 0,
 			hideExtBelow: 0.3
-		}, {
+		}, null, {
 			Parent: "ForeArmL",
 			Mult: 1,
 		}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmR_back", // Name
 		[
-			{rule: PriorityRule.ABOVE, seg: "Torso"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDSBEHINDBACK);}},
+			{rule: PriorityRule.ABOVE, seg: "Torso", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDSBEHINDBACK);}},
 			{rule: PriorityRule.ABOVE, seg: "ArmR"},
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
@@ -249,7 +250,7 @@ function LauncherLaunchGame(width, height) {
 			ParentX: 135,
 			ParentY: -20,
 		}, {
-			AngleMax: 1.6,
+			AngleMax: 1.7,
 			AngleMin: 0,
 			TranslateXPos: 21,
 			TranslateYPos: 7,
@@ -260,14 +261,15 @@ function LauncherLaunchGame(width, height) {
 			SquashXNeg: 0,
 			SquashYNeg: 0,
 			hideExtBelow: 0.3,
-		}, {
+		}, null, {
 			Parent: "ForeArmR",
 			Mult: 1,
 		}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmL_front", // Name
 		[
-			{rule: PriorityRule.ABOVE, seg: "Torso"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDSBEHINDBACK);}},
+			{rule: PriorityRule.ABOVE, seg: "Torso", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDSBEHINDBACK);}},
 			{rule: PriorityRule.ABOVE, seg: "ArmL"},
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
@@ -291,14 +293,15 @@ function LauncherLaunchGame(width, height) {
 			SquashXNeg: 0,
 			SquashYNeg: 0,
 			hideExtAbove: -0.3,
-		}, {
+		}, null, {
 			Parent: "ForeArmL",
 			Mult: 1,
 		}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmR_front", // Name
 		[
-			{rule: PriorityRule.ABOVE, seg: "Torso"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDSBEHINDBACK);}},
+			{rule: PriorityRule.ABOVE, seg: "Torso", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDSBEHINDBACK);}},
 			{rule: PriorityRule.ABOVE, seg: "ArmR"},
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
@@ -322,7 +325,7 @@ function LauncherLaunchGame(width, height) {
 			SquashXNeg: 0,
 			SquashYNeg: 0,
 			hideExtAbove: -0.3,
-		}, {
+		}, null, {
 			Parent: "ForeArmR",
 			Mult: 1,
 		}));
@@ -351,7 +354,7 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-		}, {
+		}, null, {
 			Parent: "LegL",
 			Mult: 0.15,
 		}));
@@ -380,7 +383,7 @@ function LauncherLaunchGame(width, height) {
 			SquashYPos: 0,
 			SquashXNeg: 0,
 			SquashYNeg: 0,
-		}, {
+		}, null, {
 			Parent: "LegR",
 			Mult: 0.15,
 		}));
@@ -537,7 +540,7 @@ function LauncherLaunchGame(width, height) {
 	// Listen for animate update
 	app.ticker.add((delta) => {
 		// Make changes to the skeleton
-		let change = 0.005;
+		/*let change = 0.005;
 		if (currentMode) change = -0.005;
 		let extension = 0;
 
@@ -571,7 +574,7 @@ function LauncherLaunchGame(width, height) {
 		extension = skelly.get("LegR").extension;
 		skelly.get("LegR").setExtension(extension + change * delta);
 		if (extension >= 1) currentMode2 = true;
-		if (extension <= -1) currentMode2 = false;
+		if (extension <= -1) currentMode2 = false;*/
 
 
 

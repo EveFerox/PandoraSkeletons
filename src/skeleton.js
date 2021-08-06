@@ -5,6 +5,13 @@ var PriorityRule = {
 	BELOW: false,
 };
 
+var PoseTag = {
+	HANDSBEHINDBACK: 0,
+	KNEELING: 1,
+	HANDSFISTS: 2,
+	FEETHEELS: 3,
+}
+
 class SkeletonContainer {
 	/**
 	 * @type {PIXI.Container}
@@ -34,7 +41,8 @@ class SkeletonContainer {
 			this.renderOrder.push(seg);
 		}
 
-		this.container = this.containers[Skeleton.head.Name];
+		this.container = new PIXI.Container();
+		this.container.sortableChildren = true;
 
 		this.sortRenderOrder(Skeleton);
 
@@ -42,8 +50,7 @@ class SkeletonContainer {
 			let seg = this.renderOrder[S];
 			let segContainer = this.containers[seg.Name];
 
-			if (seg.Parent)
-				this.container.addChild(segContainer);
+			this.container.addChild(segContainer);
 
 			const sprite = new PIXI.Sprite(PIXI.Texture.from(seg.Path));
 			sprite.x = -seg.Pos.PivotX;
@@ -135,6 +142,10 @@ class SkeletonContainer {
 			console.log("Warning: Cycle detected!!! If this is unexpected, please report as a bug and provide the items being worn");
 			return false;
 		} else this.renderOrder = tempOrder;
+		for (let L = 0; L < this.renderOrder.length; L++) {
+			this.containers[this.renderOrder[L].Name].zIndex = pri.get(this.renderOrder[L].Name);
+		}
+		this.container.sortChildren();
 		return true;
 	}
 
@@ -149,7 +160,10 @@ class SkeletonContainer {
 
 			segContainer.rotation = seg.extensionAngleAbsolute;
 
-			if (segContainer != this.container) { // We dont move the main container
+			if (seg.Hide && seg.Hide(Skeleton)) {
+				segContainer.children[0].visible = false;
+				seg.visible = false;
+			} else {
 				let xoffset = 0;
 				let yoffset = 0;
 
@@ -163,26 +177,26 @@ class SkeletonContainer {
 
 				let xx = (seg.Invert ? -1 : 1) * (seg.Pos.ParentX + xoffset);
 				let yy = seg.Pos.ParentY + yoffset;
-				seg.currentX = seg.segParent.currentX
-								+ xx * Math.cos(seg.segParent.extensionAngleAbsolute)
-								- yy * Math.sin(seg.segParent.extensionAngleAbsolute);
-				seg.currentY = seg.segParent.currentY
-								+ xx * Math.sin(seg.segParent.extensionAngleAbsolute)
-								+ yy * Math.cos(seg.segParent.extensionAngleAbsolute);
+				seg.currentX = ((seg.segParent) ? seg.segParent.currentX : 0)
+								+ xx *  ((seg.segParent) ? Math.cos(seg.segParent.extensionAngleAbsolute) : 0)
+								- yy *  ((seg.segParent) ? Math.sin(seg.segParent.extensionAngleAbsolute) : 0);
+				seg.currentY = ((seg.segParent) ? seg.segParent.currentY : 0)
+								+ xx *  ((seg.segParent) ? Math.sin(seg.segParent.extensionAngleAbsolute) : 0)
+								+ yy *  ((seg.segParent) ? Math.cos(seg.segParent.extensionAngleAbsolute) : 0);
 
 				segContainer.x = seg.currentX;
 				segContainer.y = seg.currentY;
-			}
 
-			if (seg.Rotation.hideExtAbove && seg.extension > seg.Rotation.hideExtAbove) {
-				segContainer.children[0].visible = false;
-				seg.visible = false;
-			} else if (seg.Rotation.hideExtBelow && seg.extension <= seg.Rotation.hideExtBelow) {
-				segContainer.children[0].visible = false;
-				seg.visible = false;
-			} else {
-				segContainer.children[0].visible = true;
-				seg.visible = true;
+				if (seg.Rotation.hideExtAbove && seg.extension > seg.Rotation.hideExtAbove) {
+					segContainer.children[0].visible = false;
+					seg.visible = false;
+				} else if (seg.Rotation.hideExtBelow && seg.extension <= seg.Rotation.hideExtBelow) {
+					segContainer.children[0].visible = false;
+					seg.visible = false;
+				} else {
+					segContainer.children[0].visible = true;
+					seg.visible = true;
+				}
 			}
 		}
 	}
@@ -192,6 +206,7 @@ class SkeletonContainer {
 class BodySkeleton {
 	segments = [];
 	head = null;
+	PoseTags = [];
 
 	/**
 	 * Holds BodySegment options and utility functions
@@ -237,7 +252,7 @@ class BodySegment {
 	Name;
 
 	/**
-	 * @type {{ rule : PriorityRule, seg: string, condition: null | function }[]}
+	 * @type {{ rule : PriorityRule, seg: string, condition: null | function(BodySkeleton) }[]}
 	 */
 	Priority;
 	/**
@@ -248,6 +263,10 @@ class BodySegment {
 	Parent;
 	Pos;
 	Rotation;
+	/**
+	 * @type {function(BodySkeleton) | null}
+	 */
+	Hide = null;
 	Ext = null;
 	Weight = null;
 
@@ -263,7 +282,7 @@ class BodySegment {
 	/**
 	 * A segment for use in Pandora characters
 	 * @param {string} Name - Name of the segment
-	 * @param {{ rule : PriorityRule, seg: string, condition: null | function }[]} Priority - Render priority
+	 * @param {{ rule : PriorityRule, seg: string, condition: null | function(BodySkeleton) }[]} Priority - Render priority
 	 * @param {string[]} PriorityTag - Render priority tag for grouping (e.g arm, or panties)
 	 * @param {string} Path - Location of the sprite for this segment
 	 * @param {string} Parent - Parent of the segment, which the segment is attached to and rotates with. If null, it will be the torso
@@ -286,6 +305,7 @@ class BodySegment {
 	 * @param {float} Rotation.SquashYNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
 	 * @param {float} Rotation.hideExtAbove - Hides this bodypart when extension is higher
 	 * @param {float} Rotation.hideExtBelow - Hides this bodypart when extension is higher
+	 * @param {function(BodySkeleton | null)} Hide - OPTIONAL Hide function
 	 * @param {} Ext - OPTIONAL extension parents for non-free segments
 	 * @param {string} Ext.Parent - if Ext is null, this is a free rotating segment. If specified, this will not freely rotate but the extension (percentage of min/max angle) will be copied from the specified segment
 	 * @param {string} Ext.Mult - multiplier for the extension parent. Basically if this is set to 0.75 and the extension parent is the arm, then this will rotate at 75% of the rate that the arm does. Good for shoulders
@@ -293,7 +313,7 @@ class BodySegment {
 	 * @param {dict} Weight.Mult - a dict {} containing names of params and how much they are multiplied by based on the weight property assigned to the character body
 	 * @param {dict} Weight.Offset - a dict {} containing names of params and how much they are offset by based on the weight property assigned to the character body
 	 */
-	constructor(Name, Priority, PriorityTag, Path, Parent, Invert, Pos, Rotation, Ext, Weight) {
+	constructor(Name, Priority, PriorityTag, Path, Parent, Invert, Pos, Rotation, Hide, Ext, Weight) {
 		this.Name = Name;
 		this.Priority = Priority;
 		this.PriorityTag = PriorityTag;
@@ -302,6 +322,7 @@ class BodySegment {
 		this.Invert = Invert;
 		this.Pos = Pos;
 		this.Rotation = Rotation;
+		this.Hide = Hide;
 		this.Ext = Ext;
 		this.Weight = Weight;
 	}
