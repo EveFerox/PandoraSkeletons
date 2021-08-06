@@ -818,7 +818,8 @@ function LauncherLaunchGame(width, height) {
 			SquashXPos: 0,
 			SquashYPos: 0,
 			SquashXNeg: 0,
-			SquashYNeg: 0,}));
+			SquashYNeg: 0,
+		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEELING_LEFT);},));
 	skelly.segments.push(new BodySegment(
 		"LegR", // Name
 		[
@@ -845,7 +846,72 @@ function LauncherLaunchGame(width, height) {
 			SquashXPos: 0,
 			SquashYPos: 0,
 			SquashXNeg: 0,
-			SquashYNeg: 0,}));
+			SquashYNeg: 0,
+		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEELING_RIGHT);},));
+	skelly.segments.push(new BodySegment(
+		"LegKneelL", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "HipL"},
+		], // Priority
+		["Legs", "Thighs"], // PriorityTag
+		100, // PriorityFallback
+		'img/LegKneelL.png', // Path
+		"Torso", // Parent
+		false, // Invert
+		{
+			PivotX: 2,
+			PivotY: 0,
+			ParentX: 8,
+			ParentY: -20,
+		}, {
+			AngleMax: 0.04,
+			AngleMin: -1,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+			SquashXPos: 0,
+			SquashYPos: 0,
+			SquashXNeg: 0,
+			SquashYNeg: 0,
+		}, (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.KNEELING_LEFT);},
+		{
+			Parent: "LegL",
+			Mult: 1,
+		}));
+	skelly.segments.push(new BodySegment(
+		"LegKneelR", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "HipR"},
+		], // Priority
+		["Legs", "Thighs"], // PriorityTag
+		100, // PriorityFallback
+		'img/LegKneelR.png', // Path
+		"Torso", // Parent
+		true, // Invert
+		{
+			PivotX: 92,
+			PivotY: 0,
+			ParentX: 8,
+			ParentY: -20,
+		}, {
+			AngleMax: 0.04,
+			AngleMin: -1,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+			SquashXPos: 0,
+			SquashYPos: 0,
+			SquashXNeg: 0,
+			SquashYNeg: 0,
+		}, (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.KNEELING_RIGHT);},
+		{
+			Parent: "LegR",
+			Mult: 1,
+		}));
 
 	skelly.assignParents();
 	skellies.push({skeleton: skelly, graphics: new SkeletonContainer(skelly)})
