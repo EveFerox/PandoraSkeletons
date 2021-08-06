@@ -6,10 +6,14 @@ var PriorityRule = {
 };
 
 var PoseTag = {
-	HANDSBEHINDBACK: 0,
-	KNEELING: 1,
-	HANDSFISTS: 2,
-	FEETHEELS: 3,
+	HANDBEHINDBACK_LEFT: 0,
+	HANDBEHINDBACK_RIGHT: 1,
+	KNEELING_LEFT: 10,
+	KNEELING_RIGHT: 11,
+	FIST_LEFT: 20,
+	FIST_RIGHT: 21,
+	TIPTOE_LEFT: 30,
+	TIPTOE_RIGHT: 31,
 }
 
 class SkeletonContainer {
@@ -27,11 +31,14 @@ class SkeletonContainer {
 	 */
 	renderOrder = [];
 
+	Skeleton;
+
 	/**
 	 * Holds Containers for a BodySkeleton
 	 * @param {BodySkeleton} Skeleton - The skeleton for this container
 	 */
 	constructor(Skeleton) {
+		this.Skeleton = Skeleton;
 		this.containers = {};
 		this.renderOrder = [];
 
@@ -66,15 +73,16 @@ class SkeletonContainer {
 
 	/**
 	 * Algorithm to sort the current render order
-	 * @param {BodySkeleton} Skeleton - The skeleton for this container
 	 */
-	sortRenderOrder(Skeleton) {
+	sortRenderOrder() {
 		// We start by creating a map with the dynamic priority of all objects
 		// We also make a temporary renderOrder
+		let highestFallback = 1;
 		let tempOrder = [];
 		let pri = new Map();
 		let priTags = new Map();
 		for (let R = 0; R < this.renderOrder.length; R++) {
+			highestFallback = Math.max(highestFallback, 1); // Highest priority fallback
 			let seg = this.renderOrder[R];
 			pri.set(seg.Name, 0);
 			for (let T = 0; T < this.renderOrder[R].PriorityTag.length; T++) {
@@ -89,7 +97,7 @@ class SkeletonContainer {
 
 		// Next we start an iteration where we migrate things to follow rules and then sort
 		let iterations = 0;
-		let iterationMax = 10;
+		let iterationMax = 100;
 		let adjusted = true;
 		while (iterations < iterationMax && adjusted) {
 			adjusted = false;
@@ -99,7 +107,7 @@ class SkeletonContainer {
 
 				for (let P = 0; P < priorities.length; P++) {
 					let priority = priorities[P];
-					if (!priority.condition || priority.condition(Skeleton))
+					if (!priority.condition || priority.condition(this.Skeleton))
 					{
 						let searchNames = [];
 						if (pri.get(priority.seg) != null) searchNames.push(priority.seg);
@@ -143,7 +151,7 @@ class SkeletonContainer {
 			return false;
 		} else this.renderOrder = tempOrder;
 		for (let L = 0; L < this.renderOrder.length; L++) {
-			this.containers[this.renderOrder[L].Name].zIndex = pri.get(this.renderOrder[L].Name);
+			this.containers[this.renderOrder[L].Name].zIndex = pri.get(this.renderOrder[L].Name) + (this.renderOrder[L].PriorityFallback/highestFallback);
 		}
 		this.container.sortChildren();
 		return true;
@@ -160,7 +168,7 @@ class SkeletonContainer {
 
 			segContainer.rotation = seg.extensionAngleAbsolute;
 
-			if (seg.Hide && seg.Hide(Skeleton)) {
+			if (seg.Hide && seg.Hide(this.Skeleton)) {
 				segContainer.children[0].visible = false;
 				seg.visible = false;
 			} else {
@@ -259,6 +267,7 @@ class BodySegment {
 	 * @type {string[]}
 	 */
 	PriorityTag;
+	PriorityFallback;
 	Path;
 	Parent;
 	Pos;
@@ -284,6 +293,7 @@ class BodySegment {
 	 * @param {string} Name - Name of the segment
 	 * @param {{ rule : PriorityRule, seg: string, condition: null | function(BodySkeleton) }[]} Priority - Render priority
 	 * @param {string[]} PriorityTag - Render priority tag for grouping (e.g arm, or panties)
+	 * @param {number} PriorityFallback - Render priority fallback when items have same priority
 	 * @param {string} Path - Location of the sprite for this segment
 	 * @param {string} Parent - Parent of the segment, which the segment is attached to and rotates with. If null, it will be the torso
 	 * @param {boolean} Invert - All rotation/translation/positions are mirrored on the x axis, but still referenced as positive. You give this to the limbs on the opposite side of the body and all the other values stay the same
@@ -313,10 +323,11 @@ class BodySegment {
 	 * @param {dict} Weight.Mult - a dict {} containing names of params and how much they are multiplied by based on the weight property assigned to the character body
 	 * @param {dict} Weight.Offset - a dict {} containing names of params and how much they are offset by based on the weight property assigned to the character body
 	 */
-	constructor(Name, Priority, PriorityTag, Path, Parent, Invert, Pos, Rotation, Hide, Ext, Weight) {
+	constructor(Name, Priority, PriorityTag, PriorityFallback, Path, Parent, Invert, Pos, Rotation, Hide, Ext, Weight) {
 		this.Name = Name;
 		this.Priority = Priority;
 		this.PriorityTag = PriorityTag;
+		this.PriorityFallback = PriorityFallback;
 		this.Path = Path;
 		this.Parent = Parent;
 		this.Invert = Invert;
@@ -421,7 +432,7 @@ class BodySegment {
 	 */
 	 get extensionAngleAbsolute() {
 		let ang = this.extensionAngle;
-		if (this.segParent) ang += this.segParent.extensionAngle;
+		if (this.segParent) ang += this.segParent.extensionAngleAbsolute;
 		return ang;
 	}
 
