@@ -7,14 +7,15 @@
   <script src="lib/pixi.js"></script>
   <script src="src/launcher.js"></script>
   <script src="src/skeleton.js"></script>
+  <script src="src/presets.js"></script>
 <body>
   <script type="text/javascript">
     let type = "WebGL"
     if(!PIXI.utils.isWebGLSupported()){
       type = "canvas"
     }
-	
-	LauncherLaunchGame(1440, 900);
+
+	LauncherLaunchGame(1440, 1080);
   </script>
 </body>
 </html>

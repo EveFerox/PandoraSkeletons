@@ -8,8 +8,8 @@ var PriorityRule = {
 var PoseTag = {
 	HANDBEHINDBACK_LEFT: 0,
 	HANDBEHINDBACK_RIGHT: 1,
-	KNEELING_LEFT: 10,
-	KNEELING_RIGHT: 11,
+	KNEEL_LEFT: 10,
+	KNEEL_RIGHT: 11,
 	FIST_LEFT: 20,
 	FIST_RIGHT: 21,
 	TIPTOE_LEFT: 30,
@@ -305,16 +305,16 @@ class BodySegment {
 	 * @param {} Rotation - REQUIRED rotation information
 	 * @param {float} Rotation.AngleMax - Max extension in radians. Must be >= 0
 	 * @param {float} Rotation.AngleMin - Max extension in radians. Must be >= 0
-	 * @param {float} Rotation.TranslateXPos - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the positive angle direction
-	 * @param {float} Rotation.TranslateYPos - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the positive angle direction
-	 * @param {float} Rotation.TranslateXNeg - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the negative angle direction
-	 * @param {float} Rotation.TranslateYNeg - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the negative angle direction
-	 * @param {float} Rotation.SquashXPos - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
-	 * @param {float} Rotation.SquashYPos - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
-	 * @param {float} Rotation.SquashXNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
-	 * @param {float} Rotation.SquashYNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
-	 * @param {float} Rotation.hideExtAbove - Hides this bodypart when extension is higher
-	 * @param {float} Rotation.hideExtBelow - Hides this bodypart when extension is higher
+	 * @param {float | null} Rotation.TranslateXPos - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the positive angle direction
+	 * @param {float | null} Rotation.TranslateYPos - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the positive angle direction
+	 * @param {float | null} Rotation.TranslateXNeg - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the negative angle direction
+	 * @param {float | null} Rotation.TranslateYNeg - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the negative angle direction
+	 * @param {float | null} Rotation.SquashXPos - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
+	 * @param {float | null} Rotation.SquashYPos - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
+	 * @param {float | null} Rotation.SquashXNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
+	 * @param {float | null} Rotation.SquashYNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
+	 * @param {float | null} Rotation.hideExtAbove - Hides this bodypart when extension is higher
+	 * @param {float | null} Rotation.hideExtBelow - Hides this bodypart when extension is higher
 	 * @param {function(BodySkeleton | null)} Hide - OPTIONAL Hide function
 	 * @param {} Ext - OPTIONAL extension parents for non-free segments
 	 * @param {string} Ext.Parent - if Ext is null, this is a free rotating segment. If specified, this will not freely rotate but the extension (percentage of min/max angle) will be copied from the specified segment
