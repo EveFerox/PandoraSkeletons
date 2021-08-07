@@ -51,7 +51,7 @@ class SkeletonContainer {
 		this.container = new PIXI.Container();
 		this.container.sortableChildren = true;
 
-		this.sortRenderOrder(Skeleton);
+		this.sortRenderOrder();
 
 		for (let S = 0; S < this.renderOrder.length; S++) {
 			let seg = this.renderOrder[S];
@@ -157,6 +157,14 @@ class SkeletonContainer {
 		return true;
 	}
 
+
+	/**
+	 * Algorithm to update the skeleton
+	 */
+	update() {
+		this.updateExtension();
+		if (this.Skeleton.changed) this.sortRenderOrder();
+	}
 	/**
 	 * Algorithm to update all item extensions and their respective graphics objects
 	 */
@@ -214,7 +222,46 @@ class SkeletonContainer {
 class BodySkeleton {
 	segments = [];
 	head = null;
+
+	/** @private */
 	PoseTags = [];
+
+	changed = false;
+
+	/**
+	 * Adds poses
+	 * @param {PoseTag[]} Poses - List of poses to add
+	 * @param {SkeletonContainer} SkeletonContainer - Container to refresh
+	 */
+	 addPose(Poses, SkeletonContainer) {
+		let changed = false;
+		for (let P = 0; P < Poses.length; P++) {
+			if (!this.PoseTags.includes(Poses[P])) {
+				this.PoseTags.push(Poses[P]);
+				changed = true;
+			}
+		}
+		this.changed = changed ? changed : this.changed;
+		return changed;
+	}
+
+	/**
+	 * Removes poses
+	 * @param {PoseTag[]} Poses - List of poses to add
+	 * @param {SkeletonContainer} SkeletonContainer - Container to refresh
+	 */
+	removePose(Poses, SkeletonContainer) {
+		let changed = false;
+		for (let P = 0; P < Poses.length; P++) {
+			if (this.PoseTags.includes(Poses[P])) {
+				this.PoseTags.splice(this.PoseTags.indexOf(Poses[P]), 1); // Remove the pose
+				changed = true;
+			}
+		}
+		this.changed = changed ? changed : this.changed;
+		return changed;
+	}
+
 
 	/**
 	 * Holds BodySegment options and utility functions
@@ -318,7 +365,8 @@ class BodySegment {
 	 * @param {function(BodySkeleton | null)} Hide - OPTIONAL Hide function
 	 * @param {} Ext - OPTIONAL extension parents for non-free segments
 	 * @param {string} Ext.Parent - if Ext is null, this is a free rotating segment. If specified, this will not freely rotate but the extension (percentage of min/max angle) will be copied from the specified segment
-	 * @param {string} Ext.Mult - multiplier for the extension parent. Basically if this is set to 0.75 and the extension parent is the arm, then this will rotate at 75% of the rate that the arm does. Good for shoulders
+	 * @param {number} Ext.Mult - multiplier for the extension parent. Basically if this is set to 0.75 and the extension parent is the arm, then this will rotate at 75% of the rate that the arm does. Good for shoulders
+	 * @param {number | null} Ext.MultNegative - Mult, but in the negative direction
 	 * @param {} Weight - OPTIONAL squish and offset based on weight
 	 * @param {dict} Weight.Mult - a dict {} containing names of params and how much they are multiplied by based on the weight property assigned to the character body
 	 * @param {dict} Weight.Offset - a dict {} containing names of params and how much they are offset by based on the weight property assigned to the character body
@@ -410,7 +458,7 @@ class BodySegment {
 	 */
 	get extension() {
 		if (this.Ext && this.segExtensionParent) {
-			this.segExtension = this.segExtensionParent.extension * this.Ext.Mult;
+			this.segExtension = Math.max(-1, Math.min(1, this.segExtensionParent.extension * ((this.Ext.MultNegative != null && this.segExtensionParent.extension < 0) ? this.Ext.MultNegative : this.Ext.Mult)));
 		}
 		return this.segExtension;
 	}
@@ -419,11 +467,8 @@ class BodySegment {
 	 * @returns {float} - Extension converted to angle
 	 */
 	 get extensionAngle() {
-		if (this.Ext && this.segExtensionParent) {
-			this.segExtension = this.segExtensionParent.extension * this.Ext.Mult;
-		}
 		let ang = 0;
-		if (this.segExtension > 0) return  (this.Invert ? -1 : 1) * this.Rotation.AngleMax * this.segExtension;
+		if (this.extension > 0) return  (this.Invert ? -1 : 1) * this.Rotation.AngleMax * this.segExtension;
 		else return (this.Invert ? 1 : -1) * this.Rotation.AngleMin * this.segExtension;
 	}
 	/**

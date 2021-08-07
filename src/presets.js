@@ -45,9 +45,9 @@ function generateStandardBody(skelly) {
 			ParentX: 58,
 			ParentY: -255,
 		}, {
-			AngleMax: 1.45,
+			AngleMax: 1.65,
 			AngleMin: -0.75,
-			TranslateXPos: -5,
+			TranslateXPos: -20,
 			TranslateYPos: 0,
 			TranslateXNeg: 0,
 			TranslateYNeg: -5,
@@ -71,9 +71,9 @@ function generateStandardBody(skelly) {
 			ParentX: 58,
 			ParentY: -255,
 		}, {
-			AngleMax: 1.45,
+			AngleMax: 1.65,
 			AngleMin: -0.75,
-			TranslateXPos: -5,
+			TranslateXPos: -20,
 			TranslateYPos: 0,
 			TranslateXNeg: 0,
 			TranslateYNeg: -5,
@@ -94,13 +94,13 @@ function generateStandardBody(skelly) {
 		false, // Invert
 		{
 			PivotX: 0,
-			PivotY: 30,
-			ParentX: 60,
-			ParentY: -275,
+			PivotY: 35,
+			ParentX: 57,
+			ParentY: -270,
 		}, {
-			AngleMax: 1.65,
+			AngleMax: 1.85,
 			AngleMin: -1,
-			TranslateXPos: 15,
+			TranslateXPos: 0,
 			TranslateYPos: 0,
 			TranslateXNeg: -10,
 			TranslateYNeg: 0,
@@ -118,13 +118,13 @@ function generateStandardBody(skelly) {
 		true, // Invert
 		{
 			PivotX: 340,
-			PivotY: 30,
-			ParentX: 60,
-			ParentY: -275,
+			PivotY: 35,
+			ParentX: 57,
+			ParentY: -270,
 		}, {
-			AngleMax: 1.65,
+			AngleMax: 1.85,
 			AngleMin: -1,
-			TranslateXPos: 15,
+			TranslateXPos: 0,
 			TranslateYPos: 0,
 			TranslateXNeg: -10,
 			TranslateYNeg: 0,}));
@@ -144,16 +144,16 @@ function generateStandardBody(skelly) {
 			PivotX: 4,
 			PivotY: 16,
 			ParentX: 132,
-			ParentY: -17,
+			ParentY: -22,
 		}, {
-			AngleMax: 1.7,
+			AngleMax: 2,
 			AngleMin: -2,
-			TranslateXPos: 21,
-			TranslateYPos: 7,
-			TranslateXNeg: 0,
-			TranslateYNeg: 0,
+			TranslateXPos: 41,
+			TranslateYPos: 14,
+			TranslateXNeg: -10,
+			TranslateYNeg: 15,
 			hideExtAbove: 0.3,
-			hideExtBelow: -0.1,}));
+			hideExtBelow: -0.2,}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmR", // Name
 		[
@@ -170,12 +170,16 @@ function generateStandardBody(skelly) {
 			PivotX: 236,
 			PivotY: 16,
 			ParentX: 132,
-			ParentY: -17,
+			ParentY: -22,
 		}, {
-			AngleMax: 1.7,
+			AngleMax: 2,
 			AngleMin: -2,
+			TranslateXPos: 41,
+			TranslateYPos: 14,
+			TranslateXNeg: -10,
+			TranslateYNeg: 15,
 			hideExtAbove: 0.3,
-			hideExtBelow: -0.1,}));
+			hideExtBelow: -0.2,}));
 
 	// ............. //
 	// ............. //
@@ -200,9 +204,9 @@ function generateStandardBody(skelly) {
 			PivotX: 4,
 			PivotY: 61,
 			ParentX: 132,
-			ParentY: -17,
+			ParentY: -22,
 		}, {
-			AngleMax: 1.7,
+			AngleMax: 2,
 			AngleMin: 0,
 			TranslateXPos: 21,
 			TranslateYPos: 7,
@@ -229,9 +233,9 @@ function generateStandardBody(skelly) {
 			PivotX: 196,
 			PivotY: 61,
 			ParentX: 135,
-			ParentY: -20,
+			ParentY: -22,
 		}, {
-			AngleMax: 1.7,
+			AngleMax: 2,
 			AngleMin: 0,
 			TranslateXPos: 21,
 			TranslateYPos: 7,
@@ -258,7 +262,7 @@ function generateStandardBody(skelly) {
 			PivotX: 4,
 			PivotY: 61,
 			ParentX: 132,
-			ParentY: -13,
+			ParentY: -18,
 		}, {
 			AngleMax: 0,
 			AngleMin: -2,
@@ -266,7 +270,7 @@ function generateStandardBody(skelly) {
 			TranslateYPos: 0,
 			TranslateXNeg: 0,
 			TranslateYNeg: 14,
-			hideExtAbove: -0.1,
+			hideExtAbove: -0.2,
 		}, null, {
 			Parent: "ForeArmL",
 			Mult: 1,
@@ -287,7 +291,7 @@ function generateStandardBody(skelly) {
 			PivotX: 196,
 			PivotY: 61,
 			ParentX: 132,
-			ParentY: -13,
+			ParentY: -18,
 		}, {
 			AngleMax: 0,
 			AngleMin: -2,
@@ -295,7 +299,7 @@ function generateStandardBody(skelly) {
 			TranslateYPos: 0,
 			TranslateXNeg: 0,
 			TranslateYNeg: 14,
-			hideExtAbove: -0.1,
+			hideExtAbove: -0.2,
 		}, null, {
 			Parent: "ForeArmR",
 			Mult: 1,
@@ -725,12 +729,14 @@ function generateStandardBody(skelly) {
 			ParentX: 10,
 			ParentY: 380,
 		}, {
-			AngleMax: 0,
+			AngleMax: 0.3,
 			AngleMin: -0.04,
+			TranslateXPos: 1,
 		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEEL_LEFT) || Skeleton.PoseTags.includes(PoseTag.TIPTOE_LEFT);},
 		{
 			Parent: "LegL",
 			Mult: -1,
+			MultNegative: -3.33,
 		}));
 	skelly.segments.push(new BodySegment(
 		"FootR", // Name
@@ -744,25 +750,19 @@ function generateStandardBody(skelly) {
 		"LegR", // Parent
 		true, // Invert
 		{
-			PivotX: 85,
+			PivotX: 84,
 			PivotY: 0,
 			ParentX: 10,
 			ParentY: 380,
 		}, {
-			AngleMax: 0,
+			AngleMax: 0.3,
 			AngleMin: -0.04,
-			TranslateXPos: 0,
-			TranslateYPos: 0,
-			TranslateXNeg: 0,
-			TranslateYNeg: 0,
-			SquashXPos: 0,
-			SquashYPos: 0,
-			SquashXNeg: 0,
-			SquashYNeg: 0,
+			TranslateXPos: 1,
 		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEEL_RIGHT) || Skeleton.PoseTags.includes(PoseTag.TIPTOE_RIGHT);},
 		{
 			Parent: "LegL",
 			Mult: -1,
+			MultNegative: -3.33,
 		}));
 	skelly.segments.push(new BodySegment(
 		"FootTiptoeL", // Name
@@ -781,12 +781,14 @@ function generateStandardBody(skelly) {
 			ParentX: 10,
 			ParentY: 380,
 		}, {
-			AngleMax: 0,
+			AngleMax: 0.3,
 			AngleMin: -0.04,
+			TranslateXPos: 1,
 		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEEL_LEFT) || !Skeleton.PoseTags.includes(PoseTag.TIPTOE_LEFT);},
 		{
 			Parent: "LegL",
 			Mult: -1,
+			MultNegative: -3.33,
 		}));
 	skelly.segments.push(new BodySegment(
 		"FootTiptoeR", // Name
@@ -805,12 +807,14 @@ function generateStandardBody(skelly) {
 			ParentX: 10,
 			ParentY: 380,
 		}, {
-			AngleMax: 0,
+			AngleMax: 0.3,
 			AngleMin: -0.04,
+			TranslateXPos: 1,
 		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEEL_RIGHT) || !Skeleton.PoseTags.includes(PoseTag.TIPTOE_RIGHT);},
 		{
 			Parent: "LegR",
 			Mult: -1,
+			MultNegative: -3.33,
 		}));
 
 	skelly.assignParents();
