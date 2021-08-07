@@ -2,19 +2,89 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"Torso", // Name
 		[], // Priority
-		["Torso"], // PriorityTag
+		["Body"], // PriorityTag
 		100, // PriorityFallback
-		'img/Body.png', // Path
+		'img/Torso.png', // Path
 		"", // Parent
 		false, // Invert
 		{
-			PivotX: 500,
-			PivotY: 500,
+			PivotX: 100,
+			PivotY: 200,
 			ParentX: 0,
 			ParentY: 0,
 		}, {
 			AngleMax: 0,
 			AngleMin: 0,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+	skelly.segments.push(new BodySegment(
+		"Chest", // Name
+		[
+			{rule: PriorityRule.ABOVE, seg: "Torso"},
+		], // Priority
+		["Body"], // PriorityTag
+		101, // PriorityFallback
+		'img/Chest.png', // Path
+		"Torso", // Parent
+		false, // Invert
+		{
+			PivotX: 100,
+			PivotY: 191,
+			ParentX: 0,
+			ParentY: -162,
+		}, {
+			AngleMax: 0.1,
+			AngleMin: -0.1,
+			TranslateXPos: 0,
+			TranslateYPos: 5,
+			TranslateXNeg: 0,
+			TranslateYNeg: 5,
+		}));
+
+	skelly.segments.push(new BodySegment(
+		"Breasts", // Name
+		[
+			{rule: PriorityRule.ABOVE, seg: "Chest"},
+		], // Priority
+		["Body"], // PriorityTag
+		101, // PriorityFallback
+		'img/Breasts.png', // Path
+		"Chest", // Parent
+		false, // Invert
+		{
+			PivotX: 100,
+			PivotY: 191,
+			ParentX: 0,
+			ParentY: 0,
+		}, {
+			AngleMax: 0,
+			AngleMin: 0,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+	skelly.segments.push(new BodySegment(
+		"Head", // Name
+		[
+			{rule: PriorityRule.ABOVE, seg: "Chest"},
+		], // Priority
+		[], // PriorityTag
+		101, // PriorityFallback
+		'img/Head.png', // Path
+		"Chest", // Parent
+		false, // Invert
+		{
+			PivotX: 86,
+			PivotY: 155,
+			ParentX: 0,
+			ParentY: -175,
+		}, {
+			AngleMax: 0.2,
+			AngleMin: -0.2,
 			TranslateXPos: 0,
 			TranslateYPos: 0,
 			TranslateXNeg: 0,
@@ -37,13 +107,13 @@ function generateStandardBody(skelly) {
 		["Arms", "UpperArms"], // PriorityTag
 		100, // PriorityFallback
 		'img/ShoulderL.png', // Path
-		"Torso", // Parent
+		"Chest", // Parent
 		false, // Invert
 		{
 			PivotX: 70,
 			PivotY: 70,
 			ParentX: 58,
-			ParentY: -255,
+			ParentY: -255 + 162,
 		}, {
 			AngleMax: 1.65,
 			AngleMin: -0.75,
@@ -63,13 +133,13 @@ function generateStandardBody(skelly) {
 		["Arms", "UpperArms"], // PriorityTag
 		101, // PriorityFallback
 		'img/ShoulderR.png', // Path
-		"Torso", // Parent
+		"Chest", // Parent
 		true, // Invert
 		{
 			PivotX: 70,
 			PivotY: 70,
 			ParentX: 58,
-			ParentY: -255,
+			ParentY: -255 + 162,
 		}, {
 			AngleMax: 1.65,
 			AngleMin: -0.75,
@@ -90,13 +160,13 @@ function generateStandardBody(skelly) {
 		["Arms", "UpperArms"], // PriorityTag
 		100, // PriorityFallback
 		'img/ArmL.png', // Path
-		"Torso", // Parent
+		"Chest", // Parent
 		false, // Invert
 		{
 			PivotX: 0,
 			PivotY: 35,
 			ParentX: 57,
-			ParentY: -270,
+			ParentY: -270 + 162,
 		}, {
 			AngleMax: 1.85,
 			AngleMin: -1,
@@ -114,13 +184,13 @@ function generateStandardBody(skelly) {
 		["Arms", "UpperArms"], // PriorityTag
 		101, // PriorityFallback
 		'img/ArmR.png', // Path
-		"Torso", // Parent
+		"Chest", // Parent
 		true, // Invert
 		{
 			PivotX: 340,
 			PivotY: 35,
 			ParentX: 57,
-			ParentY: -270,
+			ParentY: -270 + 162,
 		}, {
 			AngleMax: 1.85,
 			AngleMin: -1,

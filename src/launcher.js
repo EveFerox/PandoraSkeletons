@@ -31,6 +31,8 @@ function LauncherLaunchGame(width, height) {
 	var currentMode = false;
 	var currentMode2 = false;
 	var currentMode3 = false;
+	var currentMode4 = false;
+	var currentMode5 = false;
 
 	// Listen for animate update
 	app.ticker.add((delta) => {
@@ -72,6 +74,28 @@ function LauncherLaunchGame(width, height) {
 			skelly.get("LegR").setExtension(extension + change * delta);
 			if (extension >= 1) currentMode2 = true;
 			if (extension <= -1) currentMode2 = false;
+
+
+			// Make changes to the skeleton
+			change = 0.001;
+			if (currentMode4) change = -0.001;
+			extension = 0;
+
+			extension = skelly.get("Head").extension;
+			skelly.get("Head").setExtension(extension + change * delta);
+			if (extension >= 1) currentMode4 = true;
+			if (extension <= -1) currentMode4 = false;
+
+
+			// Make changes to the skeleton
+			change = 0.002;
+			if (currentMode5) change = -0.002;
+			extension = 0;
+
+			extension = skelly.get("Chest").extension;
+			skelly.get("Chest").setExtension(extension + change * delta);
+			if (extension >= 1) currentMode5 = true;
+			if (extension <= -1) currentMode5 = false;
 		}
 
 		// update all graphics to represent changes to skeletons
@@ -265,10 +289,28 @@ function createTestButtons() {
 
 	var button = new PIXI.Text('Legs Tight');
 	button.x = 50;
-	button.y = i; i += 25;
+	button.y = i; i += 50;
 	button.interactive = true;
 	button.buttonMode = true;
 	button.on('pointerdown', fnlegstight);
+
+	app.stage.addChild(button)
+
+	var button = new PIXI.Text('Reset head tilt');
+	button.x = 50;
+	button.y = i; i += 25;
+	button.interactive = true;
+	button.buttonMode = true;
+	button.on('pointerdown', fnresethead);
+
+	app.stage.addChild(button);
+
+	var button = new PIXI.Text('Reset torso tilt');
+	button.x = 50;
+	button.y = i; i += 50;
+	button.interactive = true;
+	button.buttonMode = true;
+	button.on('pointerdown', fnresettorso);
 
 	app.stage.addChild(button);
 
@@ -397,5 +439,13 @@ function fnlegstight() {
 
 	skelly.get("LegL").setExtension(1);
 	skelly.get("LegR").setExtension(1);
+
+}
+function fnresethead() {
+	skelly.get("Head").setExtension(0);
+
+}
+function fnresettorso() {
+	skelly.get("Chest").setExtension(0);
 
 }
