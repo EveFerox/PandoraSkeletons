@@ -61,7 +61,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 		], // Priority
 		["Arms", "UpperArms"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/ShoulderR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -112,7 +112,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "ShoulderR"},
 		], // Priority
 		["Arms", "UpperArms"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/ArmR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -162,7 +162,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "ArmR"},
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/ForeArmR.png', // Path
 		"ArmR", // Parent
 		true, // Invert
@@ -225,7 +225,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "ArmR"},
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/ForeArmR_back.png', // Path
 		"ArmR", // Parent
 		true, // Invert
@@ -283,7 +283,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "ArmR"},
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/ForeArmR_front.png', // Path
 		"ArmR", // Parent
 		true, // Invert
@@ -344,7 +344,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/HandSideR.png', // Path
 		"ForeArmR", // Parent
 		true, // Invert
@@ -390,7 +390,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/HandSideFistR.png', // Path
 		"ForeArmR", // Parent
 		true, // Invert
@@ -432,7 +432,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR_back"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/HandBackFistR.png', // Path
 		"ForeArmR_back", // Parent
 		true, // Invert
@@ -474,7 +474,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR_front"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/HandFrontFistR.png', // Path
 		"ForeArmR_front", // Parent
 		true, // Invert
@@ -516,7 +516,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR_back"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/HandBackOpenR.png', // Path
 		"ForeArmR_back", // Parent
 		true, // Invert
@@ -558,7 +558,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR_back"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/HandFrontOpenR.png', // Path
 		"ForeArmR_front", // Parent
 		true, // Invert
@@ -596,7 +596,7 @@ function generateStandardBody(skelly) {
 			ParentX: 8,
 			ParentY: -50,
 		}, {
-			AngleMax: 0.04,
+			AngleMax: 0.03,
 			AngleMin: -1.4,
 		}, null, {
 			Parent: "LegL",
@@ -608,7 +608,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.BELOW, seg: "Torso"},
 		], // Priority
 		["Legs", "Thighs"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/HipR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -618,7 +618,7 @@ function generateStandardBody(skelly) {
 			ParentX: 8,
 			ParentY: -50,
 		}, {
-			AngleMax: 0.04,
+			AngleMax: 0.03,
 			AngleMin: -1.4,
 		}, null, {
 			Parent: "LegR",
@@ -641,7 +641,7 @@ function generateStandardBody(skelly) {
 			ParentX: 8,
 			ParentY: -20,
 		}, {
-			AngleMax: 0.04,
+			AngleMax: 0.03,
 			AngleMin: -1,
 		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEEL_LEFT);},));
 	skelly.segments.push(new BodySegment(
@@ -651,7 +651,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "HipR"},
 		], // Priority
 		["Legs", "Thighs"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/LegR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -661,7 +661,7 @@ function generateStandardBody(skelly) {
 			ParentX: 8,
 			ParentY: -20,
 		}, {
-			AngleMax: 0.04,
+			AngleMax: 0.03,
 			AngleMin: -1,
 		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEEL_RIGHT);},));
 	skelly.segments.push(new BodySegment(
@@ -695,7 +695,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "HipR"},
 		], // Priority
 		["Legs", "Thighs"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/LegKneelR.png', // Path
 		"Torso", // Parent
 		true, // Invert
@@ -730,7 +730,7 @@ function generateStandardBody(skelly) {
 			ParentY: 380,
 		}, {
 			AngleMax: 0.3,
-			AngleMin: -0.04,
+			AngleMin: -0.03,
 			TranslateXPos: 1,
 		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEEL_LEFT) || Skeleton.PoseTags.includes(PoseTag.TIPTOE_LEFT);},
 		{
@@ -745,7 +745,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "LegR"},
 		], // Priority
 		["Legs", "Feet"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/FootR.png', // Path
 		"LegR", // Parent
 		true, // Invert
@@ -756,7 +756,7 @@ function generateStandardBody(skelly) {
 			ParentY: 380,
 		}, {
 			AngleMax: 0.3,
-			AngleMin: -0.04,
+			AngleMin: -0.03,
 			TranslateXPos: 1,
 		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEEL_RIGHT) || Skeleton.PoseTags.includes(PoseTag.TIPTOE_RIGHT);},
 		{
@@ -782,7 +782,7 @@ function generateStandardBody(skelly) {
 			ParentY: 380,
 		}, {
 			AngleMax: 0.3,
-			AngleMin: -0.04,
+			AngleMin: -0.03,
 			TranslateXPos: 1,
 		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEEL_LEFT) || !Skeleton.PoseTags.includes(PoseTag.TIPTOE_LEFT);},
 		{
@@ -797,7 +797,7 @@ function generateStandardBody(skelly) {
 			{rule: PriorityRule.ABOVE, seg: "LegR"},
 		], // Priority
 		["Legs", "Feet"], // PriorityTag
-		100, // PriorityFallback
+		101, // PriorityFallback
 		'img/FootTiptoeR.png', // Path
 		"LegR", // Parent
 		true, // Invert
@@ -808,7 +808,7 @@ function generateStandardBody(skelly) {
 			ParentY: 380,
 		}, {
 			AngleMax: 0.3,
-			AngleMin: -0.04,
+			AngleMin: -0.03,
 			TranslateXPos: 1,
 		}, (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.KNEEL_RIGHT) || !Skeleton.PoseTags.includes(PoseTag.TIPTOE_RIGHT);},
 		{
