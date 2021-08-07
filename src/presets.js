@@ -822,4 +822,7 @@ function generateStandardBody(skelly) {
 
 function generateStandardOutfit(skelly) {
 
+	//... outfits go here
+
+	skelly.assignParents();
 }
