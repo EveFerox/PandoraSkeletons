@@ -82,7 +82,7 @@ class SkeletonContainer {
 		let pri = new Map();
 		let priTags = new Map();
 		for (let R = 0; R < this.renderOrder.length; R++) {
-			highestFallback = Math.max(highestFallback, 1); // Highest priority fallback
+			highestFallback = Math.max(Math.max(this.renderOrder[R].PriorityFallback, highestFallback), 1); // Highest priority fallback
 			let seg = this.renderOrder[R];
 			pri.set(seg.Name, 0);
 			for (let T = 0; T < this.renderOrder[R].PriorityTag.length; T++) {
@@ -130,12 +130,12 @@ class SkeletonContainer {
 								pri.set(seg.Name, currPri + 1);
 								pri.set(searchName, rulePri - 1);
 								adjusted = true;
-								break; // To make sure each object moves at most 1 per step
+								//break; // To make sure each object moves at most 1 per step
 							} else if (priority.rule == PriorityRule.BELOW && currPri >= rulePri) {
 								pri.set(seg.Name, currPri - 1);
 								pri.set(searchName, rulePri + 1);
 								adjusted = true;
-								break; // To make sure each object moves at most 1 per step
+								//break; // To make sure each object moves at most 1 per step
 							}
 						}
 
