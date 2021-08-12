@@ -915,7 +915,7 @@ function generateSideBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"Chest", // Name
 		[
-			{rule: PriorityRule.ABOVE, seg: "Torso"},
+			{rule: PriorityRule.BELOW, seg: "Torso"},
 		], // Priority
 		["Body"], // PriorityTag
 		80, // PriorityFallback
