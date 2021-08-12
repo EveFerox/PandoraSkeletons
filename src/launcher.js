@@ -204,7 +204,7 @@ function createTestButtons() {
 
 	app.stage.addChild(button);
 
-	button = new PIXI.Text('T-pose');
+	button = new PIXI.Text('Reverse prayer');
 	button.x = 50;
 	button.y = i; i += 25;
 	button.interactive = true;
@@ -376,12 +376,12 @@ function fnarmsbehindbacktight() {
 function fnarmst() {
 	animation = false;
 
-	skelly.get("ArmL").setExtension(0);
-	skelly.get("ArmR").setExtension(0);
-	skelly.get("ForeArmL").setExtension(0);
-	skelly.get("ForeArmR").setExtension(0);
+	skelly.get("ArmL").setExtension(.9);
+	skelly.get("ArmR").setExtension(.9);
+	skelly.get("ForeArmL").setExtension(1);
+	skelly.get("ForeArmR").setExtension(1);
 
-	skelly.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT])
+	skelly.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT])
 }
 function fnarmsfront() {
 	animation = false;

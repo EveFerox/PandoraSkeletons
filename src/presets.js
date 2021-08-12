@@ -404,7 +404,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL") && Skeleton.get("ForeArmL").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_LEFT) || Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL") && Skeleton.get("ForeArmL").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandSideR", // Name
@@ -427,7 +427,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR") && Skeleton.get("ForeArmR").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_RIGHT) || Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR") && Skeleton.get("ForeArmR").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandSideFistL", // Name
@@ -450,7 +450,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL") && Skeleton.get("ForeArmL").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_LEFT) || !Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL") && Skeleton.get("ForeArmL").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandSideFistR", // Name
@@ -473,7 +473,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR") && Skeleton.get("ForeArmR").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_RIGHT) || !Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR") && Skeleton.get("ForeArmR").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandBackFistL", // Name
@@ -494,7 +494,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL_back") && Skeleton.get("ForeArmL_back").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_LEFT) || !Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL_back") && Skeleton.get("ForeArmL_back").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandBackFistR", // Name
@@ -515,7 +515,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR_back") && Skeleton.get("ForeArmR_back").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_RIGHT) || !Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR_back") && Skeleton.get("ForeArmR_back").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandFrontFistL", // Name
@@ -536,7 +536,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL_front") && Skeleton.get("ForeArmL_front").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_LEFT) || !Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL_front") && Skeleton.get("ForeArmL_front").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandFrontFistR", // Name
@@ -557,7 +557,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR_front") && Skeleton.get("ForeArmR_front").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_RIGHT) || !Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR_front") && Skeleton.get("ForeArmR_front").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandBackOpenL", // Name
@@ -578,7 +578,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL_back") && Skeleton.get("ForeArmL_back").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_LEFT) || Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL_back") && Skeleton.get("ForeArmL_back").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandBackOpenR", // Name
@@ -599,7 +599,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR_back") && Skeleton.get("ForeArmR_back").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_RIGHT) || Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR_back") && Skeleton.get("ForeArmR_back").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandFrontOpenL", // Name
@@ -620,7 +620,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL_front") && Skeleton.get("ForeArmL_front").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_LEFT) || Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL_front") && Skeleton.get("ForeArmL_front").visible)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandFrontOpenR", // Name
@@ -641,7 +641,7 @@ function generateStandardBody(skelly) {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
 		},
-		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR_front") && Skeleton.get("ForeArmR_front").visible)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.REVERSEPRAYER_RIGHT) || Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR_front") && Skeleton.get("ForeArmR_front").visible)},
 		));
 	// ............. //
 	// ............. //
@@ -939,7 +939,7 @@ function generateSideBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"ArmR", // Name
 		[
-			{rule: PriorityRule.ABOVE, seg: "ShoulderR"},
+			{rule: PriorityRule.ABOVE, seg: "Body"},
 		], // Priority
 		["RightArm"], // PriorityTag
 		80, // PriorityFallback
@@ -958,6 +958,53 @@ function generateSideBody(skelly) {
 			TranslateYPos: 0,
 			TranslateXNeg: -10,
 			TranslateYNeg: -5,
+		}));
+	skelly.segments.push(new BodySegment(
+		"ForeArmR", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "ArmR"},// condition: (Skeleton) => {return Skeleton.get("ForeArmR").extension >= -0.5;}
+			{rule: PriorityRule.ABOVE, seg: "Body"},
+		], // Priority
+		["RightArm"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/ForeArmR.png', // Path
+		"ArmR", // Parent
+		false, // Invert
+		{
+			PivotX: 14,
+			PivotY: 71,
+			ParentX: 172,
+			ParentY: 5,
+		}, {
+			AngleMax: 0,
+			AngleMin: -3.3,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 1,
+			TranslateYNeg: -2,
+		}));
+	skelly.segments.push(new BodySegment(
+		"HandR", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "ForeArmR"},// condition: (Skeleton) => {return Skeleton.get("ForeArmR").extension >= -0.5;}
+		], // Priority
+		["RightArm"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/HandFistR.png', // Path
+		"ForeArmR", // Parent
+		false, // Invert
+		{
+			PivotX: 9,
+			PivotY: 28,
+			ParentX: 89,
+			ParentY: 0,
+		}, {
+			AngleMax: 0.2,
+			AngleMin: -0.2,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
 		}));
 
 
