@@ -3,7 +3,9 @@
 var app = null;
 var circleDraw = null;
 var skelly = null;
+var skelly2 = null;
 var skellyContainer = null;
+var skelly2Container = null;
 var skellies = [];
 var animation = true;
 
@@ -20,11 +22,24 @@ function LauncherLaunchGame(width, height) {
 
 	skellies.push({skeleton: skelly, graphics: new SkeletonContainer(skelly)})
 
-	const container_body = skellies[0].graphics.container;
+
+	skelly2 = new BodySkeleton();
+	generateSideBody(skelly2);
+	generateStandardOutfit(skelly2);
+
+	skellies.push({skeleton: skelly2, graphics: new SkeletonContainer(skelly2)})
+
+	let container_body = skellies[0].graphics.container;
 	app.stage.addChild(container_body);
 
-	container_body.x = app.screen.width / 2;
+	container_body.x = app.screen.width *.4;
 	container_body.y = app.screen.height / 2;
+
+	container_body = skellies[1].graphics.container;
+	app.stage.addChild(container_body);
+
+	container_body.x = app.screen.width * .65;
+	container_body.y = app.screen.height / 2 - 170;
 
 	createTestButtons(); // Creates buttons to test thge skeleton
 
@@ -56,6 +71,8 @@ function LauncherLaunchGame(width, height) {
 
 			extension = skelly.get("ForeArmL").extension;
 			skelly.get("ForeArmL").setExtension(extension - change * delta);
+			extension = skelly2.get("ShinR").extension;
+			skelly2.get("ShinR").setExtension(extension - change * delta);
 			extension = skelly.get("ForeArmR").extension;
 			skelly.get("ForeArmR").setExtension(extension + change * delta);
 
@@ -70,6 +87,8 @@ function LauncherLaunchGame(width, height) {
 
 			extension = skelly.get("LegL").extension;
 			skelly.get("LegL").setExtension(extension + change * delta);
+			extension = skelly2.get("ThighR").extension;
+			skelly2.get("ThighR").setExtension(extension + change * delta);
 			extension = skelly.get("LegR").extension;
 			skelly.get("LegR").setExtension(extension + change * delta);
 			if (extension >= 1) currentMode2 = true;

@@ -4,7 +4,7 @@ function generateStandardBody(skelly) {
 		[], // Priority
 		["Body"], // PriorityTag
 		80, // PriorityFallback
-		'img/Torso.png', // Path
+		'img/BodyFront/Torso.png', // Path
 		"", // Parent
 		false, // Invert
 		{
@@ -27,7 +27,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Body"], // PriorityTag
 		101, // PriorityFallback
-		'img/Chest.png', // Path
+		'img/BodyFront/Chest.png', // Path
 		"Torso", // Parent
 		false, // Invert
 		{
@@ -51,7 +51,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Body"], // PriorityTag
 		102, // PriorityFallback
-		'img/Breasts.png', // Path
+		'img/BodyFront/Breasts.png', // Path
 		"Chest", // Parent
 		false, // Invert
 		{
@@ -74,7 +74,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		[], // PriorityTag
 		101, // PriorityFallback
-		'img/Head.png', // Path
+		'img/BodyFront/Head.png', // Path
 		"Chest", // Parent
 		false, // Invert
 		{
@@ -106,7 +106,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "UpperArms"], // PriorityTag
 		100, // PriorityFallback
-		'img/ShoulderL.png', // Path
+		'img/BodyFront/ShoulderL.png', // Path
 		"Chest", // Parent
 		false, // Invert
 		{
@@ -132,7 +132,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "UpperArms"], // PriorityTag
 		101, // PriorityFallback
-		'img/ShoulderR.png', // Path
+		'img/BodyFront/ShoulderR.png', // Path
 		"Chest", // Parent
 		true, // Invert
 		{
@@ -159,7 +159,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "UpperArms"], // PriorityTag
 		100, // PriorityFallback
-		'img/ArmL.png', // Path
+		'img/BodyFront/ArmL.png', // Path
 		"Chest", // Parent
 		false, // Invert
 		{
@@ -183,7 +183,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "UpperArms"], // PriorityTag
 		101, // PriorityFallback
-		'img/ArmR.png', // Path
+		'img/BodyFront/ArmR.png', // Path
 		"Chest", // Parent
 		true, // Invert
 		{
@@ -207,7 +207,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
 		100, // PriorityFallback
-		'img/ForeArmL.png', // Path
+		'img/BodyFront/ForeArmL.png', // Path
 		"ArmL", // Parent
 		false, // Invert
 		{
@@ -233,7 +233,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
 		101, // PriorityFallback
-		'img/ForeArmR.png', // Path
+		'img/BodyFront/ForeArmR.png', // Path
 		"ArmR", // Parent
 		true, // Invert
 		{
@@ -267,7 +267,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
 		100, // PriorityFallback
-		'img/ForeArmL_back.png', // Path
+		'img/BodyFront/ForeArmL_back.png', // Path
 		"ArmL", // Parent
 		false, // Invert
 		{
@@ -296,7 +296,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
 		101, // PriorityFallback
-		'img/ForeArmR_back.png', // Path
+		'img/BodyFront/ForeArmR_back.png', // Path
 		"ArmR", // Parent
 		true, // Invert
 		{
@@ -325,7 +325,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
 		100, // PriorityFallback
-		'img/ForeArmL_front.png', // Path
+		'img/BodyFront/ForeArmL_front.png', // Path
 		"ArmL", // Parent
 		false, // Invert
 		{
@@ -354,7 +354,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
 		101, // PriorityFallback
-		'img/ForeArmR_front.png', // Path
+		'img/BodyFront/ForeArmR_front.png', // Path
 		"ArmR", // Parent
 		true, // Invert
 		{
@@ -392,7 +392,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		100, // PriorityFallback
-		'img/HandSideL.png', // Path
+		'img/BodyFront/HandSideL.png', // Path
 		"ForeArmL", // Parent
 		false, // Invert
 		{
@@ -415,7 +415,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		101, // PriorityFallback
-		'img/HandSideR.png', // Path
+		'img/BodyFront/HandSideR.png', // Path
 		"ForeArmR", // Parent
 		true, // Invert
 		{
@@ -438,7 +438,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		100, // PriorityFallback
-		'img/HandSideFistL.png', // Path
+		'img/BodyFront/HandSideFistL.png', // Path
 		"ForeArmL", // Parent
 		false, // Invert
 		{
@@ -461,7 +461,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		101, // PriorityFallback
-		'img/HandSideFistR.png', // Path
+		'img/BodyFront/HandSideFistR.png', // Path
 		"ForeArmR", // Parent
 		true, // Invert
 		{
@@ -482,7 +482,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		100, // PriorityFallback
-		'img/HandBackFistL.png', // Path
+		'img/BodyFront/HandBackFistL.png', // Path
 		"ForeArmL_back", // Parent
 		false, // Invert
 		{
@@ -503,7 +503,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		101, // PriorityFallback
-		'img/HandBackFistR.png', // Path
+		'img/BodyFront/HandBackFistR.png', // Path
 		"ForeArmR_back", // Parent
 		true, // Invert
 		{
@@ -524,7 +524,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		100, // PriorityFallback
-		'img/HandFrontFistL.png', // Path
+		'img/BodyFront/HandFrontFistL.png', // Path
 		"ForeArmL_front", // Parent
 		false, // Invert
 		{
@@ -545,7 +545,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		101, // PriorityFallback
-		'img/HandFrontFistR.png', // Path
+		'img/BodyFront/HandFrontFistR.png', // Path
 		"ForeArmR_front", // Parent
 		true, // Invert
 		{
@@ -566,7 +566,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		100, // PriorityFallback
-		'img/HandBackOpenL.png', // Path
+		'img/BodyFront/HandBackOpenL.png', // Path
 		"ForeArmL_back", // Parent
 		false, // Invert
 		{
@@ -587,7 +587,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		101, // PriorityFallback
-		'img/HandBackOpenR.png', // Path
+		'img/BodyFront/HandBackOpenR.png', // Path
 		"ForeArmR_back", // Parent
 		true, // Invert
 		{
@@ -608,7 +608,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		100, // PriorityFallback
-		'img/HandFrontOpenL.png', // Path
+		'img/BodyFront/HandFrontOpenL.png', // Path
 		"ForeArmL_front", // Parent
 		false, // Invert
 		{
@@ -629,7 +629,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
 		101, // PriorityFallback
-		'img/HandFrontOpenR.png', // Path
+		'img/BodyFront/HandFrontOpenR.png', // Path
 		"ForeArmR_front", // Parent
 		true, // Invert
 		{
@@ -657,7 +657,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Legs", "Thighs"], // PriorityTag
 		100, // PriorityFallback
-		'img/HipL.png', // Path
+		'img/BodyFront/HipL.png', // Path
 		"Torso", // Parent
 		false, // Invert
 		{
@@ -679,7 +679,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Legs", "Thighs"], // PriorityTag
 		101, // PriorityFallback
-		'img/HipR.png', // Path
+		'img/BodyFront/HipR.png', // Path
 		"Torso", // Parent
 		true, // Invert
 		{
@@ -702,7 +702,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Legs", "Thighs"], // PriorityTag
 		100, // PriorityFallback
-		'img/LegL.png', // Path
+		'img/BodyFront/LegL.png', // Path
 		"Torso", // Parent
 		false, // Invert
 		{
@@ -722,7 +722,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Legs", "Thighs"], // PriorityTag
 		101, // PriorityFallback
-		'img/LegR.png', // Path
+		'img/BodyFront/LegR.png', // Path
 		"Torso", // Parent
 		true, // Invert
 		{
@@ -742,7 +742,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Legs", "Thighs"], // PriorityTag
 		100, // PriorityFallback
-		'img/LegKneelL.png', // Path
+		'img/BodyFront/LegKneelL.png', // Path
 		"Torso", // Parent
 		false, // Invert
 		{
@@ -766,7 +766,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Legs", "Thighs"], // PriorityTag
 		101, // PriorityFallback
-		'img/LegKneelR.png', // Path
+		'img/BodyFront/LegKneelR.png', // Path
 		"Torso", // Parent
 		true, // Invert
 		{
@@ -790,7 +790,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Legs", "Feet"], // PriorityTag
 		100, // PriorityFallback
-		'img/FootL.png', // Path
+		'img/BodyFront/FootL.png', // Path
 		"LegL", // Parent
 		false, // Invert
 		{
@@ -816,7 +816,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Legs", "Feet"], // PriorityTag
 		101, // PriorityFallback
-		'img/FootR.png', // Path
+		'img/BodyFront/FootR.png', // Path
 		"LegR", // Parent
 		true, // Invert
 		{
@@ -842,7 +842,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Legs", "Feet"], // PriorityTag
 		100, // PriorityFallback
-		'img/FootTiptoeL.png', // Path
+		'img/BodyFront/FootTiptoeL.png', // Path
 		"LegL", // Parent
 		false, // Invert
 		{
@@ -868,7 +868,7 @@ function generateStandardBody(skelly) {
 		], // Priority
 		["Legs", "Feet"], // PriorityTag
 		101, // PriorityFallback
-		'img/FootTiptoeR.png', // Path
+		'img/BodyFront/FootTiptoeR.png', // Path
 		"LegR", // Parent
 		true, // Invert
 		{
@@ -889,6 +889,227 @@ function generateStandardBody(skelly) {
 
 	skelly.assignParents();
 }
+
+function generateSideBody(skelly) {
+	skelly.segments.push(new BodySegment(
+		"Torso", // Name
+		[], // Priority
+		["Body"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/Torso.png', // Path
+		"", // Parent
+		false, // Invert
+		{
+			PivotX: 100,
+			PivotY: 30,
+			ParentX: 0,
+			ParentY: 0,
+		}, {
+			AngleMax: 0,
+			AngleMin: 0,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+	skelly.segments.push(new BodySegment(
+		"Chest", // Name
+		[], // Priority
+		["Body"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/Chest.png', // Path
+		"Torso", // Parent
+		false, // Invert
+		{
+			PivotX: 100,
+			PivotY: 230,
+			ParentX: 0,
+			ParentY: 35,
+		}, {
+			AngleMax: 0.1,
+			AngleMin: -0.1,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+
+
+
+	skelly.segments.push(new BodySegment(
+		"ArmR", // Name
+		[
+			{rule: PriorityRule.ABOVE, seg: "ShoulderR"},
+		], // Priority
+		["RightArm"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/ArmR.png', // Path
+		"Chest", // Parent
+		false, // Invert
+		{
+			PivotX: 42,
+			PivotY: 44,
+			ParentX: -30,
+			ParentY: -140,
+		}, {
+			AngleMax: 2.7,
+			AngleMin: -1.8,
+			TranslateXPos: -10,
+			TranslateYPos: 0,
+			TranslateXNeg: -10,
+			TranslateYNeg: -5,
+		}));
+
+
+	skelly.segments.push(new BodySegment(
+		"ThighR", // Name
+		[
+			{rule: PriorityRule.ABOVE, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "LeftLeg"},
+		], // Priority
+		["RightLeg", "Thighs"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/ThighR.png', // Path
+		"Torso", // Parent
+		false, // Invert
+		{
+			PivotX: 63,
+			PivotY: 60,
+			ParentX: -22,
+			ParentY: 115,
+		}, {
+			AngleMax: 0.7,
+			AngleMin: -0.7,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+	skelly.segments.push(new BodySegment(
+		"ShinR", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "ThighR"},
+			{rule: PriorityRule.ABOVE, seg: "LeftLeg"},
+		], // Priority
+		["RightLeg", "Shins"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/ShinR.png', // Path
+		"ThighR", // Parent
+		false, // Invert
+		{
+			PivotX: 84,
+			PivotY: 50,
+			ParentX: -10,
+			ParentY: 190,
+		}, {
+			AngleMax: 2.3,
+			AngleMin: 0,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+	skelly.segments.push(new BodySegment(
+		"FootR", // Name
+		[
+			{rule: PriorityRule.ABOVE, seg: "ShinR"},
+			{rule: PriorityRule.ABOVE, seg: "LeftLeg"},
+		], // Priority
+		["RightLeg", "Feet"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/FootR.png', // Path
+		"ShinR", // Parent
+		false, // Invert
+		{
+			PivotX: 58,
+			PivotY: 16,
+			ParentX: -17,
+			ParentY: 220,
+		}, {
+			AngleMax: 2.3,
+			AngleMin: 0,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+
+	skelly.segments.push(new BodySegment(
+		"ThighL", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+		], // Priority
+		["LeftLeg", "Thighs"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/ThighL.png', // Path
+		"Torso", // Parent
+		false, // Invert
+		{
+			PivotX: 63,
+			PivotY: 60,
+			ParentX: -22,
+			ParentY: 115,
+		}, {
+			AngleMax: 0.7,
+			AngleMin: -0.7,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+	skelly.segments.push(new BodySegment(
+		"ShinL", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+			{rule: PriorityRule.BELOW, seg: "ThighL"},
+		], // Priority
+		["LeftLeg", "Shins"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/ShinL.png', // Path
+		"ThighL", // Parent
+		false, // Invert
+		{
+			PivotX: 84,
+			PivotY: 50,
+			ParentX: -10,
+			ParentY: 190,
+		}, {
+			AngleMax: 2.3,
+			AngleMin: 0,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+	skelly.segments.push(new BodySegment(
+		"FootL", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "Torso"},
+			{rule: PriorityRule.ABOVE, seg: "ShinL"},
+		], // Priority
+		["LeftLeg", "Feet"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/FootL.png', // Path
+		"ShinL", // Parent
+		false, // Invert
+		{
+			PivotX: 58,
+			PivotY: 16,
+			ParentX: -17,
+			ParentY: 220,
+		}, {
+			AngleMax: 2.3,
+			AngleMin: 0,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+
+	skelly.assignParents();
+
+}
+
 
 function generateStandardOutfit(skelly) {
 
