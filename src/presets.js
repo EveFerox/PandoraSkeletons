@@ -612,10 +612,10 @@ function generateStandardBody(skelly) {
 		"ForeArmL_front", // Parent
 		false, // Invert
 		{
-			PivotX: 2,
-			PivotY: 72,
-			ParentX: 80,
-			ParentY: 11,
+			PivotX: 13,
+			PivotY: 27,
+			ParentX: 89,
+			ParentY: 8,
 		}, {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
@@ -914,7 +914,9 @@ function generateSideBody(skelly) {
 		}));
 	skelly.segments.push(new BodySegment(
 		"Chest", // Name
-		[], // Priority
+		[
+			{rule: PriorityRule.ABOVE, seg: "Torso"},
+		], // Priority
 		["Body"], // PriorityTag
 		80, // PriorityFallback
 		'img/BodySide/Chest.png', // Path
@@ -928,6 +930,56 @@ function generateSideBody(skelly) {
 		}, {
 			AngleMax: 0.1,
 			AngleMin: -0.1,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+
+	skelly.segments.push(new BodySegment(
+		"Breasts", // Name
+		[
+			{rule: PriorityRule.ABOVE, seg: "Chest"},
+		], // Priority
+		["Body"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/Breasts.png', // Path
+		"Chest", // Parent
+		false, // Invert
+		{
+			PivotX: 100,
+			PivotY: 230,
+			ParentX: 0,
+			ParentY: 0,
+		}, {
+			AngleMax: 0,
+			AngleMin: 0,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		}));
+
+
+
+	skelly.segments.push(new BodySegment(
+		"Head", // Name
+		[
+			{rule: PriorityRule.ABOVE, seg: "Chest"},
+		], // Priority
+		[], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/Head.png', // Path
+		"Chest", // Parent
+		false, // Invert
+		{
+			PivotX: 88,
+			PivotY: 155,
+			ParentX: -30,
+			ParentY: -190,
+		}, {
+			AngleMax: 0,
+			AngleMin: 0,
 			TranslateXPos: 0,
 			TranslateYPos: 0,
 			TranslateXNeg: 0,
@@ -962,7 +1014,7 @@ function generateSideBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"ForeArmR", // Name
 		[
-			{rule: PriorityRule.BELOW, seg: "ArmR"},// condition: (Skeleton) => {return Skeleton.get("ForeArmR").extension >= -0.5;}
+			{rule: PriorityRule.BELOW, seg: "ArmR"},
 			{rule: PriorityRule.ABOVE, seg: "Body"},
 		], // Priority
 		["RightArm"], // PriorityTag
@@ -986,7 +1038,33 @@ function generateSideBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandR", // Name
 		[
-			{rule: PriorityRule.BELOW, seg: "ForeArmR"},// condition: (Skeleton) => {return Skeleton.get("ForeArmR").extension >= -0.5;}
+			{rule: PriorityRule.BELOW, seg: "ForeArmR"},
+		], // Priority
+		["RightArm"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/HandOpenR.png', // Path
+		"ForeArmR", // Parent
+		false, // Invert
+		{
+			PivotX: 9,
+			PivotY: 32,
+			ParentX: 89,
+			ParentY: -1,
+		}, {
+			AngleMax: 0.2,
+			AngleMin: -0.2,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR") && Skeleton.get("ForeArmR").visible)},
+		));
+
+	skelly.segments.push(new BodySegment(
+		"FistR", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "ForeArmR"},
 		], // Priority
 		["RightArm"], // PriorityTag
 		80, // PriorityFallback
@@ -1005,7 +1083,110 @@ function generateSideBody(skelly) {
 			TranslateYPos: 0,
 			TranslateXNeg: 0,
 			TranslateYNeg: 0,
+		},
+		(Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.FIST_RIGHT) || !(Skeleton.get("ForeArmR") && Skeleton.get("ForeArmR").visible)},
+		));
+
+	skelly.segments.push(new BodySegment(
+		"ArmL", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "Body"},
+		], // Priority
+		["RightArm"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/ArmL.png', // Path
+		"Chest", // Parent
+		false, // Invert
+		{
+			PivotX: 42,
+			PivotY: 44,
+			ParentX: -30,
+			ParentY: -140,
+		}, {
+			AngleMax: 2.7,
+			AngleMin: -1.8,
+			TranslateXPos: -10,
+			TranslateYPos: 0,
+			TranslateXNeg: -10,
+			TranslateYNeg: -5,
 		}));
+	skelly.segments.push(new BodySegment(
+		"ForeArmL", // Name
+		[
+			{rule: PriorityRule.BELOW, seg: "ArmL"},
+			{rule: PriorityRule.BELOW, seg: "Body"},
+		], // Priority
+		["LeftArm"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/ForeArmL.png', // Path
+		"ArmL", // Parent
+		false, // Invert
+		{
+			PivotX: 14,
+			PivotY: 71,
+			ParentX: 172,
+			ParentY: 5,
+		}, {
+			AngleMax: 0,
+			AngleMin: -3.3,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 1,
+			TranslateYNeg: -2,
+		}));
+	skelly.segments.push(new BodySegment(
+		"HandL", // Name
+		[
+			{rule: PriorityRule.ABOVE, seg: "ForeArmL"},
+			{rule: PriorityRule.BELOW, seg: "Body"},
+		], // Priority
+		["LeftArm"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/HandOpenL.png', // Path
+		"ForeArmL", // Parent
+		false, // Invert
+		{
+			PivotX: 13,
+			PivotY: 32,
+			ParentX: 89,
+			ParentY: 2,
+		}, {
+			AngleMax: 0.2,
+			AngleMin: -0.2,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL") && Skeleton.get("ForeArmL").visible)},
+		));
+
+	skelly.segments.push(new BodySegment(
+		"FistL", // Name
+		[
+			{rule: PriorityRule.ABOVE, seg: "ForeArmL"},
+			{rule: PriorityRule.BELOW, seg: "Body"},
+		], // Priority
+		["LeftArm"], // PriorityTag
+		80, // PriorityFallback
+		'img/BodySide/HandFistL.png', // Path
+		"ForeArmL", // Parent
+		false, // Invert
+		{
+			PivotX: 9,
+			PivotY: 28,
+			ParentX: 87,
+			ParentY: -1,
+		}, {
+			AngleMax: 0.2,
+			AngleMin: -0.2,
+			TranslateXPos: 0,
+			TranslateYPos: 0,
+			TranslateXNeg: 0,
+			TranslateYNeg: 0,
+		},
+		(Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.FIST_LEFT) || !(Skeleton.get("ForeArmL") && Skeleton.get("ForeArmL").visible)},
+		));
 
 
 	skelly.segments.push(new BodySegment(
