@@ -74,12 +74,10 @@ function LauncherLaunchGame(width, height) {
 
 			extension = skelly.get("ForeArmL").extension;
 			skelly.get("ForeArmL").setExtension(extension - change * delta);
-			skelly2.get("ForeArmL").setExtension(extension - change * delta);
 			extension = skelly2.get("ShinR").extension;
 			skelly2.get("ShinR").setExtension(extension - change * delta);
 			extension = skelly.get("ForeArmR").extension;
 			skelly.get("ForeArmR").setExtension(extension + change * delta);
-			skelly2.get("ForeArmR").setExtension(extension + change * delta);
 			skelly2.get("ShinL").setExtension(extension + change * delta);
 
 			if (extension >= 1) currentMode3 = true;

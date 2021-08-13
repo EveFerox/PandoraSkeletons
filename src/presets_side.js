@@ -248,7 +248,7 @@ function generateSideBody(skelly) {
 		}, {
 			AngleMax: 3.3,
 			AngleMin: -3.3,
-			TranslateXPos: -80,
+			TranslateXPos: -110,
 			TranslateYPos: 0,
 			TranslateXNeg: 1,
 			TranslateYNeg: -2,
