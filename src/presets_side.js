@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @param {BodySkeleton} skelly
  */
 function generateSideBody(skelly) {
@@ -257,7 +257,7 @@ function generateSideBody(skelly) {
 			TranslateXNeg: 1,
 			TranslateYNeg: -2,
 		},
-		(Skeleton) => {Skeleton.PoseTags.includes(PoseTag.BOXTIE)},
+		(Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.BOXTIE)},
 		));
 	skelly.segments.push(new BodySegment(
 		"HandL", // Name
