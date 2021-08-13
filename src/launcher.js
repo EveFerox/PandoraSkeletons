@@ -2,15 +2,35 @@
 
 var app = null;
 var circleDraw = null;
+
+/**
+ * @type {BodySkeleton}
+ */
 var skelly = null;
+
+/**
+ * @type {BodySkeleton}
+ */
 var skelly2 = null;
+
+/**
+ * @type {SkeletonContainer}
+ */
 var skellyContainer = null;
+
+/**
+ * @type {SkeletonContainer}
+ */
 var skelly2Container = null;
+
+/**
+ * @type {{skeleton: BodySkeleton, graphics: SkeletonContainer}[]}
+ */
 var skellies = [];
+
 var animation = true;
 
 function LauncherLaunchGame(width, height) {
-
 	// Creates the document
 	app = new PIXI.Application({
 		width: width, height: height, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
