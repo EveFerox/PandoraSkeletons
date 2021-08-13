@@ -1,3 +1,7 @@
+/**
+ * 
+ * @param {BodySkeleton} skelly
+ */
 function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"Torso", // Name
@@ -890,8 +894,10 @@ function generateStandardBody(skelly) {
 	skelly.assignParents();
 }
 
-
-
+/**
+ * 
+ * @param {BodySkeleton} skelly
+ */
 function generateStandardOutfit(skelly) {
 
 	//... outfits go here
