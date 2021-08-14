@@ -657,10 +657,10 @@ function generateStandardBody(skelly) {
 		"ForeArmR_front", // Parent
 		true, // Invert
 		{
-			PivotX: 116,
-			PivotY: 72,
-			ParentX: 80,
-			ParentY: 11,
+			PivotX: 137,
+			PivotY: 27,
+			ParentX: 89,
+			ParentY: 8,
 		}, {
 			AngleMax: -0.2,
 			AngleMin: -0.2,
