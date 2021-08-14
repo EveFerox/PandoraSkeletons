@@ -4,7 +4,7 @@
 	"private": true,
 	"license": "MIT",
 	"scripts": {
-		"build": "parcel build index.html --public-url ./",
+		"build": "parcel build index.html --public-url ./ --no-scope-hoist",
 		"start": "parcel index.html",
 		"lint": "eslint --max-warnings 0 ./src",
 		"lint:fix": "eslint --fix ./src"
