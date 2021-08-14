@@ -20,6 +20,76 @@ export const enum PoseTag {
 	TIPTOE_RIGHT = 31,
 }
 
+export interface IPriority {
+	rule: boolean;
+	seg: string;
+	condition?: ((skeleton: BodySkeleton) => boolean);
+}
+
+export interface IPosition {
+	/**Center of the sprite */
+	pivotX: number;
+	/**Center of the sprite */
+	pivotY: number;
+	/**Location to fix the sprite on the parent */
+	parentX: number;
+	/**Location to fix the sprite on the parent */
+	parentY: number;
+}
+
+export interface IRotation {
+	/**Max extension in radians. Must be >= 0 */
+	angleMax: number;
+	/**Max extension in radians. Must be >= 0 */
+	angleMin: number;
+
+	/**translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the positive angle direction */
+	translateXPos?: number;
+	/**translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the positive angle direction */
+	translateYPos?: number;
+	/**translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the positive angle direction */
+	translateXNeg?: number;
+	/**translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the positive angle direction */
+	translateYNeg?: number;
+
+	/**like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front */
+	squashXPos?: number;
+	/**like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front */
+	squashYPos?: number;
+	/**like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front */
+	squashXNeg?: number;
+	/**like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front */
+	squashYNeg?: number;
+
+	/**Hides this bodypart when extension is higher */
+	hideExtAbove?: number;
+	/**Hides this bodypart when extension is higher */
+	hideExtBelow?: number;
+}
+
+/**extension parents for non-free segments */
+export interface IExtension {
+	/**if Ext is null, this is a free rotating segment. If specified, this will not freely rotate but the extension (percentage of min/max angle) will be copied from the specified segment */
+	parent: string;
+
+	/**multiplier for the extension parent. Basically if this is set to 0.75 and the extension parent is the arm, then this will rotate at 75% of the rate that the arm does. Good for shoulders */
+	mult: number;
+
+	/**Mult, but in the negative direction */
+	multNegative?: number;
+}
+
+export interface IWeight {
+	//  * @param {dict} Weight.Mult - a dict {} containing names of params and how much they are multiplied by based on the weight property assigned to the character body
+	//  * @param {dict} Weight.Offset - a dict {} containing names of params and how much they are offset by based on the weight property assigned to the character body
+
+	/**Map containing names of params and how much they are multiplied by based on the weight property assigned to the character body */
+	mult: Map<string, any>;
+
+	/**Map containing names of params and how much they are offset by based on the weight property assigned to the character body */
+	offset: Map<string, any>;
+}
+
 /**
  * Holds Containers for a BodySkeleton
  */
@@ -57,13 +127,13 @@ export class SkeletonContainer {
 
 			this.container.addChild(segContainer);
 
-			const sprite = new PIXI.Sprite(PIXI.Texture.from(seg.Path));
-			sprite.x = -seg.Pos.PivotX;
-			sprite.y = -seg.Pos.PivotY;
+			const sprite = new PIXI.Sprite(PIXI.Texture.from(seg.path));
+			sprite.x = -seg.position.pivotX;
+			sprite.y = -seg.position.pivotY;
 			segContainer.addChild(sprite);
 
-			segContainer.x = seg.Pos.ParentX * (seg.invert ? -1 : 1);
-			segContainer.y = seg.Pos.ParentY;
+			segContainer.x = seg.position.parentX * (seg.invert ? -1 : 1);
+			segContainer.y = seg.position.parentY;
 		}
 	}
 
@@ -74,21 +144,19 @@ export class SkeletonContainer {
 		// We start by creating a map with the dynamic priority of all objects
 		// We also make a temporary renderOrder
 		let highestFallback = 1;
-		const tempOrder = [];
-		const pri = new Map();
-		const priTags = new Map();
-		for (let R = 0; R < this.renderOrder.length; R++) {
-			highestFallback = Math.max(Math.max(this.renderOrder[R].PriorityFallback, highestFallback), 1); // Highest priority fallback
-			let seg = this.renderOrder[R];
+		const tempOrder: BodySegment[] = [];
+		const pri = new Map<string, number>();
+		const priTags = new Map<string, string[]>();
+		for (const seg of this.renderOrder) {
+			highestFallback = Math.max(Math.max(seg.priorityFallback, highestFallback), 1); // Highest priority fallback
 			pri.set(seg.name, 0);
-			for (let T = 0; T < this.renderOrder[R].PriorityTag.length; T++) {
-				let tag = seg.PriorityTag[T];
-				let tags = priTags.get(tag);
+			for (const tag of seg.priorityTag) {
+				const tags = priTags.get(tag);
 				if (!tags) priTags.set(tag, [seg.name]);
 				else tags.push(seg.name);
 			}
-			pri.set(this.renderOrder[R].name, 0);
-			tempOrder.push(this.renderOrder[R]);
+			pri.set(seg.name, 0);
+			tempOrder.push(seg);
 		}
 
 		// Next we start an iteration where we migrate things to follow rules and then sort
@@ -97,60 +165,55 @@ export class SkeletonContainer {
 		let adjusted = true;
 		while (iterations < iterationMax && adjusted) {
 			adjusted = false;
-			for (let R = 0; R < tempOrder.length; R++) {
-				let seg = tempOrder[R];
-				let priorities = seg.Priority;
+			for (const seg of tempOrder) {
+				const priorities = seg.priority;
 
-				if (seg.name == 'ArmL') {
-					const a = 1;
-				}
-
-				for (let P = 0; P < priorities.length; P++) {
-					let priority = priorities[P];
+				for (const priority of priorities) {
 					if (!priority.condition || priority.condition(this.skeleton)) {
-						let searchNames = [];
+						const searchNames: string[] = [];
 						if (pri.get(priority.seg) != null) searchNames.push(priority.seg);
 						else {
-							let tags = priTags.get(priority.seg);
+							const tags = priTags.get(priority.seg);
 							if (tags != null) {
-								for (let T = 0; T < tags.length; T++) {
-									searchNames.push(tags[T]);
+								for (const t of tags) {
+									searchNames.push(t);
 								}
 							}
 						}
 
-						for (let SN = 0; SN < searchNames.length; SN++) {
-							let searchName = searchNames[SN];
-
-							let currPri = pri.get(seg.name);
-							let rulePri = pri.get(searchName);
-							if (priority.rule == PriorityRule.ABOVE && currPri <= rulePri) {
+						for (const searchName of searchNames) {
+							const currPri = pri.get(seg.name);
+							const rulePri = pri.get(searchName);
+							if (priority.rule === PriorityRule.ABOVE && currPri <= rulePri) {
 								pri.set(seg.name, currPri + 1);
 								pri.set(searchName, rulePri - 1);
 								adjusted = true;
 								//break; // To make sure each object moves at most 1 per step
-							} else if (priority.rule == PriorityRule.BELOW && currPri >= rulePri) {
+							} else if (priority.rule === PriorityRule.BELOW && currPri >= rulePri) {
 								pri.set(seg.name, currPri - 1);
 								pri.set(searchName, rulePri + 1);
 								adjusted = true;
 								//break; // To make sure each object moves at most 1 per step
 							}
 						}
-
 					}
 				}
 			}
 
-			tempOrder.sort((a, b) => { return pri.get(a.name) - pri.get(b.name); });
+			tempOrder.sort((a, b) => pri.get(a.name) - pri.get(b.name));
 			iterations++;
 		}
-		if (iterations == iterationMax) {
-			console.log('Warning: Cycle detected!!! If this is unexpected, please report as a bug and provide the items being worn');
+		if (iterations === iterationMax) {
+			// console.log('Warning: Cycle detected!!! If this is unexpected, please report as a bug and provide the items being worn');
 			return false;
-		} else this.renderOrder = tempOrder;
-		for (let L = 0; L < this.renderOrder.length; L++) {
-			this.containers[this.renderOrder[L].name].zIndex = pri.get(this.renderOrder[L].name) + (this.renderOrder[L].PriorityFallback / highestFallback);
+		} else {
+			this.renderOrder = tempOrder;
 		}
+
+		for (const seg of this.renderOrder) {
+			this.containers[seg.name].zIndex = pri.get(seg.name) + (seg.priorityFallback / highestFallback);
+		}
+
 		this.container.sortChildren();
 		return true;
 	}
@@ -174,7 +237,7 @@ export class SkeletonContainer {
 
 			segContainer.rotation = seg.extensionAngleAbsolute;
 
-			if (seg.Hide && seg.Hide(this.skeleton)) {
+			if (seg.hide && seg.hide(this.skeleton)) {
 				segContainer.children[0].visible = false;
 				seg.visible = false;
 			} else {
@@ -182,15 +245,15 @@ export class SkeletonContainer {
 				let yoffset = 0;
 
 				if (seg.extension > 0) {
-					xoffset = seg.Rotation.TranslateXPos ? seg.Rotation.TranslateXPos * seg.extension : 0;
-					yoffset = seg.Rotation.TranslateYPos ? seg.Rotation.TranslateYPos * seg.extension : 0;
+					xoffset = seg.rotation.translateXPos ? seg.rotation.translateXPos * seg.extension : 0;
+					yoffset = seg.rotation.translateYPos ? seg.rotation.translateYPos * seg.extension : 0;
 				} else {
-					xoffset = seg.Rotation.TranslateXNeg ? -seg.Rotation.TranslateXNeg * seg.extension : 0;
-					yoffset = seg.Rotation.TranslateYNeg ? -seg.Rotation.TranslateYNeg * seg.extension : 0;
+					xoffset = seg.rotation.translateXNeg ? -seg.rotation.translateXNeg * seg.extension : 0;
+					yoffset = seg.rotation.translateYNeg ? -seg.rotation.translateYNeg * seg.extension : 0;
 				}
 
-				let xx = (seg.invert ? -1 : 1) * (seg.Pos.ParentX + xoffset);
-				let yy = seg.Pos.ParentY + yoffset;
+				const xx = (seg.invert ? -1 : 1) * (seg.position.parentX + xoffset);
+				const yy = seg.position.parentY + yoffset;
 				seg.currentX = ((seg.segParent) ? seg.segParent.currentX : 0)
 					+ xx * ((seg.segParent) ? Math.cos(seg.segParent.extensionAngleAbsolute) : 0)
 					- yy * ((seg.segParent) ? Math.sin(seg.segParent.extensionAngleAbsolute) : 0);
@@ -201,10 +264,10 @@ export class SkeletonContainer {
 				segContainer.x = seg.currentX;
 				segContainer.y = seg.currentY;
 
-				if (seg.Rotation.hideExtAbove && seg.extension > seg.Rotation.hideExtAbove) {
+				if (seg.rotation.hideExtAbove && seg.extension > seg.rotation.hideExtAbove) {
 					segContainer.children[0].visible = false;
 					seg.visible = false;
-				} else if (seg.Rotation.hideExtBelow && seg.extension <= seg.Rotation.hideExtBelow) {
+				} else if (seg.rotation.hideExtBelow && seg.extension <= seg.rotation.hideExtBelow) {
 					segContainer.children[0].visible = false;
 					seg.visible = false;
 				} else {
@@ -222,10 +285,9 @@ export class SkeletonContainer {
  */
 export class BodySkeleton {
 	segments: BodySegment[] = [];
-	head: BodySegment | null = null;
+	head?: BodySegment;
 
-	/** @private */
-	private poseTags: PoseTag[] = [];
+	poseTags: PoseTag[] = [];
 
 	changed: boolean = false;
 
@@ -266,17 +328,18 @@ export class BodySkeleton {
 	 * @param head - Optional name of the head
 	 */
 	assignParents(head: string = 'Torso'): void {
-		for (let S = 0; S < this.segments.length; S++) {
-			if (this.segments[S].name == head) {
-				this.head = this.segments[S];
+		for (const seg of this.segments) {
+			if (seg.name === head) {
+				this.head = seg;
 				break;
 			}
 		}
+
 		if (this.head) {
-			for (let S = 0; S < this.segments.length; S++) {
-				this.segments[S].setParent(this.segments);
+			for (const seg of this.segments) {
+				seg.setParent(this.segments);
 			}
-		} else console.log('Warning, torso not found when generating skeleton');
+		} //else console.log('Warning, torso not found when generating skeleton');
 	}
 
 	/**
@@ -284,8 +347,9 @@ export class BodySkeleton {
 	 * @param name - Name of the segment
 	 * @returns The segment with the right name, otherwise null
 	 */
-	get(name: string): BodySegment | undefined {
-		return this.segments.find((x) => x.name === name);
+	get(name: string): BodySegment {
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		return this.segments.find((x) => x.name === name)!;
 	}
 }
 
@@ -295,99 +359,94 @@ export class BodySkeleton {
 export class BodySegment {
 	name: string;
 
-	/**
-	 * @type {{ rule : PriorityRule, seg: string, condition: null | function(BodySkeleton) }[]}
-	 */
-	Priority;
-	/**
-	 * @type {string[]}
-	 */
-	PriorityTag;
-	PriorityFallback;
-	Path;
-	Parent;
-	Pos;
-	Rotation;
-	/**
-	 * @type {function(BodySkeleton) | null}
-	 */
-	Hide: ((skeleton: BodySkeleton) => void) | null = null;
-	Ext = null;
-	Weight = null;
+	priority: IPriority[];
+
+	/**Render priority tag for grouping (e.g arm, or panties) */
+	priorityTag: string[];
+
+	/**Render priority fallback when items have same priority */
+	priorityFallback: number;
+
+	/**Location of the sprite for this segment */
+	path: string;
+
+	/**Parent of the segment, which the segment is attached to and rotates with. If null, it will be the torso */
+	parent: string;
+
+	position: IPosition;
+
+	rotation: IRotation;
+
+	/**OPTIONAL Hide function */
+	hide?: ((skeleton: BodySkeleton) => boolean);
+
+	ext?: IExtension;
+	weight?: IWeight;
 
 	currentX = 0;
 	currentY = 0;
 	visible = true;
 
-	segParent: BodySegment | null = null;
-	segExtensionParent = null;
+	segParent?: BodySegment;
+	segExtensionParent?: BodySegment;
 	segChildren: BodySegment[] = [];
 	segExtension = 0.0;
 
+	/**All rotation/translation/positions are mirrored on the x axis, but still referenced as positive. You give this to the limbs on the opposite side of the body and all the other values stay the same */
 	invert: boolean = false;
 
 	/**
-	 * @param Name - Name of the segment
-	 * @param {{ rule : PriorityRule, seg: string, condition: null | function(BodySkeleton) }[]} Priority - Render priority
-	 * @param {string[]} PriorityTag - Render priority tag for grouping (e.g arm, or panties)
-	 * @param {number} PriorityFallback - Render priority fallback when items have same priority
-	 * @param {string} Path - Location of the sprite for this segment
-	 * @param {string} Parent - Parent of the segment, which the segment is attached to and rotates with. If null, it will be the torso
-	 * @param {boolean} Invert - All rotation/translation/positions are mirrored on the x axis, but still referenced as positive. You give this to the limbs on the opposite side of the body and all the other values stay the same
-	 * @param {} Pos - REQUIRED position information
-	 * @param {float} Pos.PivotX - Center of the sprite
-	 * @param {float} Pos.PivotY - Center of the sprite
-	 * @param {float} Pos.ParentX - Location to fix the sprite on the parent
-	 * @param {float} Pos.ParentY - Location to fix the sprite on the parent
-	 * @param {} Rotation - REQUIRED rotation information
-	 * @param {float} Rotation.AngleMax - Max extension in radians. Must be >= 0
-	 * @param {float} Rotation.AngleMin - Max extension in radians. Must be >= 0
-	 * @param {float | null} Rotation.TranslateXPos - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the positive angle direction
-	 * @param {float | null} Rotation.TranslateYPos - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the positive angle direction
-	 * @param {float | null} Rotation.TranslateXNeg - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the negative angle direction
-	 * @param {float | null} Rotation.TranslateYNeg - translation in x/y direction, this value is in pixels and is the value the sprite will be translated at max extension in the negative angle direction
-	 * @param {float | null} Rotation.SquashXPos - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
-	 * @param {float | null} Rotation.SquashYPos - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
-	 * @param {float | null} Rotation.SquashXNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
-	 * @param {float | null} Rotation.SquashYNeg - like translation, but instead it is a factor of how much the length changes. Good for shrinking forearms to simulate folding hands in front
-	 * @param {float | null} Rotation.hideExtAbove - Hides this bodypart when extension is higher
-	 * @param {float | null} Rotation.hideExtBelow - Hides this bodypart when extension is higher
-	 * @param {function(BodySkeleton | null)} Hide - OPTIONAL Hide function
-	 * @param {} Ext - OPTIONAL extension parents for non-free segments
-	 * @param {string} Ext.Parent - if Ext is null, this is a free rotating segment. If specified, this will not freely rotate but the extension (percentage of min/max angle) will be copied from the specified segment
-	 * @param {number} Ext.Mult - multiplier for the extension parent. Basically if this is set to 0.75 and the extension parent is the arm, then this will rotate at 75% of the rate that the arm does. Good for shoulders
-	 * @param {number | null} Ext.MultNegative - Mult, but in the negative direction
-	 * @param {} Weight - OPTIONAL squish and offset based on weight
-	 * @param {dict} Weight.Mult - a dict {} containing names of params and how much they are multiplied by based on the weight property assigned to the character body
-	 * @param {dict} Weight.Offset - a dict {} containing names of params and how much they are offset by based on the weight property assigned to the character body
+	 * @param name - Name of the segment
+	 * @param priority - Render priority
+	 * @param priorityTag - Render priority tag for grouping (e.g arm, or panties)
+	 * @param priorityFallback - Render priority fallback when items have same priority
+	 * @param path - Location of the sprite for this segment
+	 * @param parent - Parent of the segment, which the segment is attached to and rotates with. If null, it will be the torso
+	 * @param invert - All rotation/translation/positions are mirrored on the x axis, but still referenced as positive. You give this to the limbs on the opposite side of the body and all the other values stay the same
+	 * @param rotation - REQUIRED rotation information
+	 * @param hide - OPTIONAL Hide function
+	 * @param extension - OPTIONAL extension parents for non-free segments
+	 * @param weight - OPTIONAL squish and offset based on weight
 	 */
-	constructor(Name, Priority, PriorityTag, PriorityFallback, Path, Parent, Invert, Pos, Rotation, Hide, Ext, Weight) {
-		this.name = Name;
-		this.Priority = Priority;
-		this.PriorityTag = PriorityTag;
-		this.PriorityFallback = PriorityFallback;
-		this.Path = Path;
-		this.Parent = Parent;
-		this.invert = Invert;
-		this.Pos = Pos;
-		this.Rotation = Rotation;
-		this.Hide = Hide;
-		this.Ext = Ext;
-		this.Weight = Weight;
+	constructor(
+		name: string,
+		priority: IPriority[],
+		priorityTag: string[],
+		priorityFallback: number,
+		path: string,
+		parent: string,
+		invert: boolean,
+		position: IPosition,
+		rotation: IRotation,
+		hide: ((skeleton: BodySkeleton) => boolean) | undefined = undefined,
+		extension: IExtension | undefined = undefined,
+		weight: IWeight | undefined = undefined) {
+		this.name = name;
+		this.priority = priority;
+		this.priorityTag = priorityTag;
+		this.priorityFallback = priorityFallback;
+		this.path = path;
+		this.parent = parent;
+		this.invert = invert;
+		this.position = position;
+		this.rotation = rotation;
+		this.hide = hide;
+		this.ext = extension;
+		this.weight = weight;
 	}
 
 	/**
-	 * A sets the parent, called for everything in the skeleton once all segments are added
+	 * Sets the parent, called for everything in the skeleton once all segments are added
 	 * @param skeleton - List of BodySegments
 	 * @returns - Whether or not the operation was successful
 	 */
 	setParent(skeleton: BodySegment[]): boolean {
 		let pass = 0;
-		if (!this.Parent) return true;
-		for (let S = 0; S < skeleton.length; S++) {
-			if (skeleton[S].name == this.Parent) {
-				this.segParent = skeleton[S];
-				if (!this.Ext)
+		if (!this.parent) return true;
+		for (const seg of skeleton) {
+			if (seg.name === this.parent) {
+				this.segParent = seg;
+				if (!this.ext)
 					return this.segParent.addChild(this);
 				else {
 					pass += 1;
@@ -395,9 +454,10 @@ export class BodySegment {
 				}
 			}
 		}
-		for (let S = 0; S < skeleton.length; S++) {
-			if (skeleton[S].name == this.Ext.Parent) {
-				this.segExtensionParent = skeleton[S];
+
+		for (const seg of skeleton) {
+			if (this.ext && seg.name === this.ext.parent) {
+				this.segExtensionParent = seg;
 				pass += 1;
 				break;
 			}
@@ -446,8 +506,8 @@ export class BodySegment {
 	 * @returns - Current Extension Percentage
 	 */
 	get extension(): number {
-		if (this.Ext && this.segExtensionParent) {
-			this.segExtension = Math.max(-1, Math.min(1, this.segExtensionParent.extension * ((this.Ext.MultNegative != null && this.segExtensionParent.extension < 0) ? this.Ext.MultNegative : this.Ext.Mult)));
+		if (this.ext && this.segExtensionParent) {
+			this.segExtension = Math.max(-1, Math.min(1, this.segExtensionParent.extension * ((this.ext.multNegative != null && this.segExtensionParent.extension < 0) ? this.ext.multNegative : this.ext.mult)));
 		}
 		return this.segExtension;
 	}
@@ -456,8 +516,8 @@ export class BodySegment {
 	 * @returns - Extension converted to angle
 	 */
 	get extensionAngle(): number {
-		if (this.extension > 0) return (this.invert ? -1 : 1) * this.Rotation.AngleMax * this.segExtension;
-		else return (this.invert ? 1 : -1) * this.Rotation.AngleMin * this.segExtension;
+		if (this.extension > 0) return (this.invert ? -1 : 1) * this.rotation.angleMax * this.segExtension;
+		else return (this.invert ? 1 : -1) * this.rotation.angleMin * this.segExtension;
 	}
 	/**
 	 * Gets the absolute extension as an angle
@@ -474,7 +534,7 @@ export class BodySegment {
 	 * @param amount - Sets the extension in terms of percentage of max
 	 */
 	setExtension(amount: number): void {
-		if (this.Ext) return;
+		if (this.ext) return;
 		this.segExtension = Math.min(1, Math.max(-1, amount));
 	}
 
@@ -483,13 +543,13 @@ export class BodySegment {
 	 * @param angle - Sets the extension in radians
 	 */
 	setExtensionAngle(angle: number): void {
-		if (this.Ext) return;
+		if (this.ext) return;
 		const ang = (this.invert ? -angle : angle);
 		let ext = 0;
-		if (ang > 0 && this.Rotation.AngleMax > 0) {
-			ext = ang / this.Rotation.AngleMax;
-		} else if (ang < 0 && this.Rotation.AngleMin < 0) {
-			ext = ang / this.Rotation.AngleMin;
+		if (ang > 0 && this.rotation.angleMax > 0) {
+			ext = ang / this.rotation.angleMax;
+		} else if (ang < 0 && this.rotation.angleMin < 0) {
+			ext = ang / this.rotation.angleMin;
 		}
 
 		this.segExtension = Math.min(1, Math.max(-1, ext));

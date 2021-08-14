@@ -128,218 +128,52 @@ export function LauncherLaunchGame(width: number, height: number): void {
 	});
 }
 
-function createTestButtons(): void {
+function createTestButtons() {
+	let x = 50;
 	let i = 100;
 
-	button = new PIXI.Text('Toggle Animation');
-	button.x = 50;
-	button.y = i; i += 50;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fntoggleAnimation);
+	x += 0;
 
-	app.stage.addChild(button);
+	const createText = (
+		text: string,
+		fn: PIXI.utils.EventEmitter.ListenerFn
+	) => {
+		const button = new PIXI.Text(text);
+		button.x = x;
+		button.y = i;
+		button.interactive = true;
+		button.buttonMode = true;
+		button.on('pointerdown', fn);
+		app.stage.addChild(button);
+	};
 
-	button = new PIXI.Text('Toggle Kneel Left');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fntoggleKneelLeft);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Toggle Kneel Right');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fntoggleKneelRight);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Toggle Tiptoes');
-	button.x = 50;
-	button.y = i; i += 50;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fntoggleTiptoes);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Toggle Fist Left');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fntoggleFistLeft);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Toggle Fist Right');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fntoggleFistRight);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Toggle Hands behind back');
-	button.x = 50;
-	button.y = i; i += 50;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fntoggleBehindBack);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Arms in boxtie');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnboxtie);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Reverse prayer');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnarmst);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Arms in fiddle');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnarmsfiddle);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Arms at sides');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnarmsside);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Arms in front');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnarmsfront);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Arms yoked');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnarmsyoked);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Arms over head');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnarmsoverhead);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Arms behind back');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnarmsbehindback);
-
-	app.stage.addChild(button);
-
-	button = new PIXI.Text('Arms elbow bound');
-	button.x = 50;
-	button.y = i; i += 50;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnarmsbehindbacktight);
-
-	app.stage.addChild(button);
-
-	var button = new PIXI.Text('Legs Spread');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnlegsspread);
-
-	app.stage.addChild(button);
-
-	var button = new PIXI.Text('Legs Wide');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnlegswide);
-
-	app.stage.addChild(button);
-
-	var button = new PIXI.Text('Legs Closed');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnlegsclosed);
-
-	app.stage.addChild(button);
-
-	var button = new PIXI.Text('Legs Normal');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnlegsnormal);
-
-	app.stage.addChild(button);
-
-	var button = new PIXI.Text('Legs Tight');
-	button.x = 50;
-	button.y = i; i += 50;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnlegstight);
-
-	app.stage.addChild(button);
-
-	var button = new PIXI.Text('Reset head tilt');
-	button.x = 50;
-	button.y = i; i += 25;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnresethead);
-
-	app.stage.addChild(button);
-
-	var button = new PIXI.Text('Reset torso tilt');
-	button.x = 50;
-	button.y = i; i += 50;
-	button.interactive = true;
-	button.buttonMode = true;
-	button.on('pointerdown', fnresettorso);
-
-	app.stage.addChild(button);
-
+	createText('Toggle Animation', fntoggleAnimation); i += 50;
+	createText('Toggle Kneel Left', fntoggleKneelLeft); i += 25;
+	createText('Toggle Kneel Right', fntoggleKneelRight); i += 25;
+	createText('Toggle Tiptoes', fntoggleTiptoes); i += 50;
+	createText('Toggle Fist Left', fntoggleFistLeft); i += 25;
+	createText('Toggle Fist Right', fntoggleFistRight); i += 25;
+	createText('Toggle Hands behind back', fntoggleBehindBack); i += 50;
+	createText('Arms in boxtie', fnboxtie); i += 25;
+	createText('Reverse prayer', fnarmst); i += 25;
+	createText('Arms in fiddle', fnarmsfiddle); i += 25;
+	createText('Arms at sides', fnarmsside); i += 25;
+	createText('Arms in front', fnarmsfront); i += 25;
+	createText('Arms yoked', fnarmsyoked); i += 25;
+	createText('Arms over head', fnarmsoverhead); i += 25;
+	createText('Arms behind back', fnarmsbehindback); i += 25;
+	createText('Arms elbow bound', fnarmsbehindbacktight); i += 50;
+	createText('Legs Spread', fnlegsspread); i += 25;
+	createText('Legs Wide', fnlegswide); i += 25;
+	createText('Legs Closed', fnlegsclosed); i += 25;
+	createText('Legs Normal', fnlegsnormal); i += 25;
+	createText('Legs Tight', fnlegstight); i += 50;
+	createText('Reset head tilt', fnresethead); i += 25;
+	createText('Reset torso tilt', fnresettorso); i += 50;
 }
-function fntoggleAnimation() { animation = !animation; }
+function fntoggleAnimation() {
+	animation = !animation;
+}
 function fntoggleKneelLeft() {
 	if (!skelly.removePose([PoseTag.KNEEL_LEFT])) skelly.addPose([PoseTag.KNEEL_LEFT]);
 	if (!skelly2.removePose([PoseTag.KNEEL_LEFT])) skelly2.addPose([PoseTag.KNEEL_LEFT]);
@@ -379,7 +213,7 @@ function fnboxtie() {
 	skelly.removePose([PoseTag.YOKED]);
 	skelly2.removePose([PoseTag.YOKED]);
 	skelly.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT]);
-	skelly2.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT,]);
+	skelly2.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT]);
 	skelly.addPose([PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.BOXTIE]);
 	skelly2.addPose([PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.BOXTIE]);
 }
