@@ -109,6 +109,10 @@ class SkeletonContainer {
 				let seg = tempOrder[R];
 				let priorities = seg.Priority;
 
+				if (seg.Name == "ArmL") {
+					const a = 1;
+				}
+
 				for (let P = 0; P < priorities.length; P++) {
 					let priority = priorities[P];
 					if (!priority.condition || priority.condition(this.Skeleton))

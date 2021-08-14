@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @param {BodySkeleton} skelly
  */
 function generateStandardBody(skelly) {
@@ -158,7 +158,9 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"ArmL", // Name
 		[
-			{rule: PriorityRule.BELOW, seg: "Body"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_LEFT);}},
+			{rule: PriorityRule.ABOVE, seg: "Chest", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_LEFT);}},
+			{rule: PriorityRule.BELOW, seg: "Breasts"},
 			{rule: PriorityRule.ABOVE, seg: "ShoulderL"},
 		], // Priority
 		["Arms", "UpperArms"], // PriorityTag
@@ -182,7 +184,9 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"ArmR", // Name
 		[
-			{rule: PriorityRule.BELOW, seg: "Body"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Chest", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.BELOW, seg: "Breasts"},
 			{rule: PriorityRule.ABOVE, seg: "ShoulderR"},
 		], // Priority
 		["Arms", "UpperArms"], // PriorityTag
@@ -205,8 +209,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"ForeArmL", // Name
 		[
-			{rule: PriorityRule.BELOW, seg: "Body"},
-			{rule: PriorityRule.BELOW, seg: "Legs"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Chest", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ArmL"},
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
@@ -220,19 +224,19 @@ function generateStandardBody(skelly) {
 			ParentX: 132,
 			ParentY: -22,
 		}, {
-			AngleMax: 2,
+			AngleMax: 2.75,
 			AngleMin: -2,
 			TranslateXPos: 41,
 			TranslateYPos: 14,
 			TranslateXNeg: -10,
 			TranslateYNeg: 15,
-			hideExtAbove: 0.3,
+			hideExtAbove: 0.2,
 			hideExtBelow: -0.2,}));
 	skelly.segments.push(new BodySegment(
 		"ForeArmR", // Name
 		[
-			{rule: PriorityRule.BELOW, seg: "Body"},
-			{rule: PriorityRule.BELOW, seg: "Legs"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Chest", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ArmR"},
 		], // Priority
 		["Arms", "ForeArms"], // PriorityTag
@@ -246,13 +250,13 @@ function generateStandardBody(skelly) {
 			ParentX: 132,
 			ParentY: -22,
 		}, {
-			AngleMax: 2,
+			AngleMax: 2.75,
 			AngleMin: -2,
 			TranslateXPos: 41,
 			TranslateYPos: 14,
 			TranslateXNeg: -10,
 			TranslateYNeg: 15,
-			hideExtAbove: 0.3,
+			hideExtAbove: 0.2,
 			hideExtBelow: -0.2,}));
 
 	// ............. //
@@ -280,13 +284,13 @@ function generateStandardBody(skelly) {
 			ParentX: 132,
 			ParentY: -22,
 		}, {
-			AngleMax: 2,
+			AngleMax: 2.75,
 			AngleMin: 0,
-			TranslateXPos: 21,
-			TranslateYPos: 7,
+			TranslateXPos: 25,
+			TranslateYPos: 19,
 			TranslateXNeg: 0,
 			TranslateYNeg: 0,
-			hideExtBelow: 0.3
+			hideExtBelow: 0.2
 		}, null, {
 			Parent: "ForeArmL",
 			Mult: 1,
@@ -309,13 +313,13 @@ function generateStandardBody(skelly) {
 			ParentX: 135,
 			ParentY: -22,
 		}, {
-			AngleMax: 2,
+			AngleMax: 2.75,
 			AngleMin: 0,
-			TranslateXPos: 21,
-			TranslateYPos: 7,
+			TranslateXPos: 25,
+			TranslateYPos: 19,
 			TranslateXNeg: 0,
 			TranslateYNeg: 0,
-			hideExtBelow: 0.3,
+			hideExtBelow: 0.2,
 		}, null, {
 			Parent: "ForeArmR",
 			Mult: 1,
@@ -390,8 +394,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandSideL", // Name
 		[
-			{rule: PriorityRule.BELOW, seg: "Body"},
-			{rule: PriorityRule.BELOW, seg: "Legs"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmL"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -413,8 +417,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandSideR", // Name
 		[
-			{rule: PriorityRule.BELOW, seg: "Body"},
-			{rule: PriorityRule.BELOW, seg: "Legs"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -436,8 +440,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandSideFistL", // Name
 		[
-			{rule: PriorityRule.BELOW, seg: "Body"},
-			{rule: PriorityRule.BELOW, seg: "Legs"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmL"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -459,8 +463,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandSideFistR", // Name
 		[
-			{rule: PriorityRule.BELOW, seg: "Body"},
-			{rule: PriorityRule.BELOW, seg: "Legs"},
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -482,6 +486,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandBackFistL", // Name
 		[
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmL_back"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -503,6 +509,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandBackFistR", // Name
 		[
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR_back"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -524,6 +532,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandFrontFistL", // Name
 		[
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmL_front"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -545,6 +555,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandFrontFistR", // Name
 		[
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR_front"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -566,6 +578,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandBackOpenL", // Name
 		[
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmL_back"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -587,6 +601,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandBackOpenR", // Name
 		[
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR_back"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -608,6 +624,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandFrontOpenL", // Name
 		[
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmL_back"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -629,6 +647,8 @@ function generateStandardBody(skelly) {
 	skelly.segments.push(new BodySegment(
 		"HandFrontOpenR", // Name
 		[
+			{rule: PriorityRule.BELOW, seg: "Legs", condition: (Skeleton) => {return Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
+			{rule: PriorityRule.ABOVE, seg: "Body", condition: (Skeleton) => {return !Skeleton.PoseTags.includes(PoseTag.HANDBEHINDBACK_RIGHT);}},
 			{rule: PriorityRule.ABOVE, seg: "ForeArmR_back"},
 		], // Priority
 		["Arms", "Hands"], // PriorityTag
@@ -895,7 +915,7 @@ function generateStandardBody(skelly) {
 }
 
 /**
- * 
+ *
  * @param {BodySkeleton} skelly
  */
 function generateStandardOutfit(skelly) {

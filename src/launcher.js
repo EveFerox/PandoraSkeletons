@@ -240,6 +240,15 @@ function createTestButtons() {
 
 	app.stage.addChild(button);
 
+	button = new PIXI.Text('Arms in fiddle');
+	button.x = 50;
+	button.y = i; i += 25;
+	button.interactive = true;
+	button.buttonMode = true;
+	button.on('pointerdown', fnarmsfiddle);
+
+	app.stage.addChild(button);
+
 	button = new PIXI.Text('Arms at sides');
 	button.x = 50;
 	button.y = i; i += 25;
@@ -393,8 +402,8 @@ function fnboxtie() {
 
 	skelly.get("ArmL").setExtension(0.825);
 	skelly.get("ArmR").setExtension(0.825);
-	skelly.get("ForeArmL").setExtension(0.95);
-	skelly.get("ForeArmR").setExtension(0.95);
+	skelly.get("ForeArmL").setExtension(0.7);
+	skelly.get("ForeArmR").setExtension(0.7);
 
 	skelly2.get("ArmL").setExtension(0.635);
 	skelly2.get("ArmR").setExtension(0.635);
@@ -431,8 +440,8 @@ function fnarmsbehindbacktight() {
 
 	skelly.get("ArmL").setExtension(1);
 	skelly.get("ArmR").setExtension(1);
-	skelly.get("ForeArmL").setExtension(0.1);
-	skelly.get("ForeArmR").setExtension(0.1);
+	skelly.get("ForeArmL").setExtension(0.075);
+	skelly.get("ForeArmR").setExtension(0.075);
 
 	skelly2.get("ArmL").setExtension(.67);
 	skelly2.get("ForeArmL").setExtension(-0.02);
@@ -452,8 +461,8 @@ function fnarmst() {
 
 	skelly.get("ArmL").setExtension(.9);
 	skelly.get("ArmR").setExtension(.9);
-	skelly.get("ForeArmL").setExtension(1);
-	skelly.get("ForeArmR").setExtension(1);
+	skelly.get("ForeArmL").setExtension(0.74);
+	skelly.get("ForeArmR").setExtension(0.74);
 
 
 	skelly2.get("ArmL").setExtension(0.7);
@@ -473,13 +482,31 @@ function fnarmsfront() {
 
 	skelly.get("ArmL").setExtension(.8);
 	skelly.get("ArmR").setExtension(.8);
-	skelly.get("ForeArmL").setExtension(0.35);
-	skelly.get("ForeArmR").setExtension(0.35);
+	skelly.get("ForeArmL").setExtension(0.26);
+	skelly.get("ForeArmR").setExtension(0.26);
 
 	skelly2.get("ArmL").setExtension(.475);
 	skelly2.get("ForeArmL").setExtension(-.1);
 	skelly2.get("ArmR").setExtension(0.5);
 	skelly2.get("ForeArmR").setExtension(-.125);
+
+	skelly.removePose([PoseTag.YOKED])
+	skelly2.removePose([PoseTag.YOKED])
+	skelly.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE])
+	skelly2.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE])
+}
+function fnarmsfiddle() {
+	animation = false;
+
+	skelly.get("ArmL").setExtension(1);
+	skelly.get("ArmR").setExtension(1);
+	skelly.get("ForeArmL").setExtension(1);
+	skelly.get("ForeArmR").setExtension(1);
+
+	skelly2.get("ArmL").setExtension(0.2);
+	skelly2.get("ForeArmL").setExtension(-.5);
+	skelly2.get("ArmR").setExtension(0.225);
+	skelly2.get("ForeArmR").setExtension(-.525);
 
 	skelly.removePose([PoseTag.YOKED])
 	skelly2.removePose([PoseTag.YOKED])
