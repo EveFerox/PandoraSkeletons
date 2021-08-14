@@ -1,54 +1,46 @@
-"use strict";
+import * as PIXI from 'pixi.js';
 
-var PriorityRule = {
+export const PriorityRule = {
 	ABOVE: true,
 	BELOW: false,
 };
 
-var PoseTag = {
-	HANDBEHINDBACK_LEFT: 0,
-	HANDBEHINDBACK_RIGHT: 1,
-	REVERSEPRAYER_LEFT: 2,
-	REVERSEPRAYER_RIGHT: 3,
-	BOXTIE: 4,
-	YOKED: 5,
-	KNEEL_LEFT: 10,
-	KNEEL_RIGHT: 11,
-	FIST_LEFT: 20,
-	FIST_RIGHT: 21,
-	TIPTOE_LEFT: 30,
-	TIPTOE_RIGHT: 31,
+export const enum PoseTag {
+	HANDBEHINDBACK_LEFT = 0,
+	HANDBEHINDBACK_RIGHT = 1,
+	REVERSEPRAYER_LEFT = 2,
+	REVERSEPRAYER_RIGHT = 3,
+	BOXTIE = 4,
+	YOKED = 5,
+	KNEEL_LEFT = 10,
+	KNEEL_RIGHT = 11,
+	FIST_LEFT = 20,
+	FIST_RIGHT = 21,
+	TIPTOE_LEFT = 30,
+	TIPTOE_RIGHT = 31,
 }
 
-class SkeletonContainer {
-	/**
-	 * @type {PIXI.Container}
-	 */
-	container = null;
+/**
+ * Holds Containers for a BodySkeleton
+ */
+export class SkeletonContainer {
+	container: PIXI.Container;
+
+	containers: Map<string, PIXI.Container> = new Map<string, PIXI.Container>();
+
+	renderOrder: BodySegment[] = [];
+
+	skeleton: BodySkeleton;
 
 	/**
-	 * @type {Object.<string, PIXI.container>}
+	 * @param skeleton - The skeleton for this container
 	 */
-	containers = {};
-	/**
-	 * @type {BodySegment}
-	 */
-	renderOrder = [];
-
-	Skeleton;
-
-	/**
-	 * Holds Containers for a BodySkeleton
-	 * @param {BodySkeleton} Skeleton - The skeleton for this container
-	 */
-	constructor(Skeleton) {
-		this.Skeleton = Skeleton;
-		this.containers = {};
+	constructor(skeleton: BodySkeleton) {
+		this.skeleton = skeleton;
 		this.renderOrder = [];
 
-		for (let S = 0; S < Skeleton.segments.length; S++) {
-			let seg = Skeleton.segments[S];
-			this.containers[seg.Name] = new PIXI.Container();
+		for (const seg of skeleton.segments) {
+			this.containers.set(seg.name, new PIXI.Container());
 			this.renderOrder.push(seg);
 		}
 
@@ -57,9 +49,11 @@ class SkeletonContainer {
 
 		this.sortRenderOrder();
 
-		for (let S = 0; S < this.renderOrder.length; S++) {
-			let seg = this.renderOrder[S];
-			let segContainer = this.containers[seg.Name];
+		for (const seg of this.renderOrder) {
+			const segContainer = this.containers.get(seg.name);
+			if (segContainer === undefined) {
+				continue;
+			}
 
 			this.container.addChild(segContainer);
 
@@ -68,40 +62,38 @@ class SkeletonContainer {
 			sprite.y = -seg.Pos.PivotY;
 			segContainer.addChild(sprite);
 
-			segContainer.x = seg.Pos.ParentX * (seg.Invert ? -1 : 1);
+			segContainer.x = seg.Pos.ParentX * (seg.invert ? -1 : 1);
 			segContainer.y = seg.Pos.ParentY;
 		}
-
-
 	}
 
 	/**
 	 * Algorithm to sort the current render order
 	 */
-	sortRenderOrder() {
+	sortRenderOrder(): boolean {
 		// We start by creating a map with the dynamic priority of all objects
 		// We also make a temporary renderOrder
 		let highestFallback = 1;
-		let tempOrder = [];
-		let pri = new Map();
-		let priTags = new Map();
+		const tempOrder = [];
+		const pri = new Map();
+		const priTags = new Map();
 		for (let R = 0; R < this.renderOrder.length; R++) {
 			highestFallback = Math.max(Math.max(this.renderOrder[R].PriorityFallback, highestFallback), 1); // Highest priority fallback
 			let seg = this.renderOrder[R];
-			pri.set(seg.Name, 0);
+			pri.set(seg.name, 0);
 			for (let T = 0; T < this.renderOrder[R].PriorityTag.length; T++) {
 				let tag = seg.PriorityTag[T];
 				let tags = priTags.get(tag);
-				if (!tags) priTags.set(tag, [seg.Name]);
-				else tags.push(seg.Name);
+				if (!tags) priTags.set(tag, [seg.name]);
+				else tags.push(seg.name);
 			}
-			pri.set(this.renderOrder[R].Name, 0);
+			pri.set(this.renderOrder[R].name, 0);
 			tempOrder.push(this.renderOrder[R]);
 		}
 
 		// Next we start an iteration where we migrate things to follow rules and then sort
 		let iterations = 0;
-		let iterationMax = 100;
+		const iterationMax = 100;
 		let adjusted = true;
 		while (iterations < iterationMax && adjusted) {
 			adjusted = false;
@@ -109,14 +101,13 @@ class SkeletonContainer {
 				let seg = tempOrder[R];
 				let priorities = seg.Priority;
 
-				if (seg.Name == "ArmL") {
+				if (seg.name == 'ArmL') {
 					const a = 1;
 				}
 
 				for (let P = 0; P < priorities.length; P++) {
 					let priority = priorities[P];
-					if (!priority.condition || priority.condition(this.Skeleton))
-					{
+					if (!priority.condition || priority.condition(this.skeleton)) {
 						let searchNames = [];
 						if (pri.get(priority.seg) != null) searchNames.push(priority.seg);
 						else {
@@ -128,19 +119,18 @@ class SkeletonContainer {
 							}
 						}
 
-
 						for (let SN = 0; SN < searchNames.length; SN++) {
 							let searchName = searchNames[SN];
 
-							let currPri = pri.get(seg.Name);
+							let currPri = pri.get(seg.name);
 							let rulePri = pri.get(searchName);
 							if (priority.rule == PriorityRule.ABOVE && currPri <= rulePri) {
-								pri.set(seg.Name, currPri + 1);
+								pri.set(seg.name, currPri + 1);
 								pri.set(searchName, rulePri - 1);
 								adjusted = true;
 								//break; // To make sure each object moves at most 1 per step
 							} else if (priority.rule == PriorityRule.BELOW && currPri >= rulePri) {
-								pri.set(seg.Name, currPri - 1);
+								pri.set(seg.name, currPri - 1);
 								pri.set(searchName, rulePri + 1);
 								adjusted = true;
 								//break; // To make sure each object moves at most 1 per step
@@ -151,40 +141,40 @@ class SkeletonContainer {
 				}
 			}
 
-			tempOrder.sort((a, b) => {return pri.get(a.Name) - pri.get(b.Name)});
+			tempOrder.sort((a, b) => { return pri.get(a.name) - pri.get(b.name); });
 			iterations++;
 		}
 		if (iterations == iterationMax) {
-			console.log("Warning: Cycle detected!!! If this is unexpected, please report as a bug and provide the items being worn");
+			console.log('Warning: Cycle detected!!! If this is unexpected, please report as a bug and provide the items being worn');
 			return false;
 		} else this.renderOrder = tempOrder;
 		for (let L = 0; L < this.renderOrder.length; L++) {
-			this.containers[this.renderOrder[L].Name].zIndex = pri.get(this.renderOrder[L].Name) + (this.renderOrder[L].PriorityFallback/highestFallback);
+			this.containers[this.renderOrder[L].name].zIndex = pri.get(this.renderOrder[L].name) + (this.renderOrder[L].PriorityFallback / highestFallback);
 		}
 		this.container.sortChildren();
 		return true;
 	}
 
-
 	/**
 	 * Algorithm to update the skeleton
 	 */
-	update() {
+	update(): void {
 		this.updateExtension();
-		if (this.Skeleton.changed) this.sortRenderOrder();
+		if (this.skeleton.changed) this.sortRenderOrder();
 	}
 	/**
 	 * Algorithm to update all item extensions and their respective graphics objects
 	 */
-	updateExtension() {
-
-		for (let S = 0; S < this.renderOrder.length; S++) {
-			let seg = this.renderOrder[S];
-			let segContainer = this.containers[seg.Name];
+	updateExtension(): void {
+		for (const seg of this.renderOrder) {
+			const segContainer = this.containers.get(seg.name);
+			if (segContainer === undefined) {
+				continue;
+			}
 
 			segContainer.rotation = seg.extensionAngleAbsolute;
 
-			if (seg.Hide && seg.Hide(this.Skeleton)) {
+			if (seg.Hide && seg.Hide(this.skeleton)) {
 				segContainer.children[0].visible = false;
 				seg.visible = false;
 			} else {
@@ -199,14 +189,14 @@ class SkeletonContainer {
 					yoffset = seg.Rotation.TranslateYNeg ? -seg.Rotation.TranslateYNeg * seg.extension : 0;
 				}
 
-				let xx = (seg.Invert ? -1 : 1) * (seg.Pos.ParentX + xoffset);
+				let xx = (seg.invert ? -1 : 1) * (seg.Pos.ParentX + xoffset);
 				let yy = seg.Pos.ParentY + yoffset;
 				seg.currentX = ((seg.segParent) ? seg.segParent.currentX : 0)
-								+ xx *  ((seg.segParent) ? Math.cos(seg.segParent.extensionAngleAbsolute) : 0)
-								- yy *  ((seg.segParent) ? Math.sin(seg.segParent.extensionAngleAbsolute) : 0);
+					+ xx * ((seg.segParent) ? Math.cos(seg.segParent.extensionAngleAbsolute) : 0)
+					- yy * ((seg.segParent) ? Math.sin(seg.segParent.extensionAngleAbsolute) : 0);
 				seg.currentY = ((seg.segParent) ? seg.segParent.currentY : 0)
-								+ xx *  ((seg.segParent) ? Math.sin(seg.segParent.extensionAngleAbsolute) : 0)
-								+ yy *  ((seg.segParent) ? Math.cos(seg.segParent.extensionAngleAbsolute) : 0);
+					+ xx * ((seg.segParent) ? Math.sin(seg.segParent.extensionAngleAbsolute) : 0)
+					+ yy * ((seg.segParent) ? Math.cos(seg.segParent.extensionAngleAbsolute) : 0);
 
 				segContainer.x = seg.currentX;
 				segContainer.y = seg.currentY;
@@ -227,25 +217,27 @@ class SkeletonContainer {
 
 }
 
-class BodySkeleton {
-	segments = [];
-	head = null;
+/**
+ * Holds BodySegment options and utility functions
+ */
+export class BodySkeleton {
+	segments: BodySegment[] = [];
+	head: BodySegment | null = null;
 
 	/** @private */
-	PoseTags = [];
+	private poseTags: PoseTag[] = [];
 
-	changed = false;
+	changed: boolean = false;
 
 	/**
 	 * Adds poses
-	 * @param {PoseTag[]} Poses - List of poses to add
-	 * @param {SkeletonContainer} SkeletonContainer - Container to refresh
+	 * @param poses - List of poses to add
 	 */
-	 addPose(Poses, SkeletonContainer) {
+	addPose(poses: PoseTag[]): boolean {
 		let changed = false;
-		for (let P = 0; P < Poses.length; P++) {
-			if (!this.PoseTags.includes(Poses[P])) {
-				this.PoseTags.push(Poses[P]);
+		for (const p of poses) {
+			if (!this.poseTags.includes(p)) {
+				this.poseTags.push(p);
 				changed = true;
 			}
 		}
@@ -255,14 +247,13 @@ class BodySkeleton {
 
 	/**
 	 * Removes poses
-	 * @param {PoseTag[]} Poses - List of poses to add
-	 * @param {SkeletonContainer} SkeletonContainer - Container to refresh
+	 * @param poses - List of poses to add
 	 */
-	removePose(Poses, SkeletonContainer) {
+	removePose(poses: PoseTag[]): boolean {
 		let changed = false;
-		for (let P = 0; P < Poses.length; P++) {
-			if (this.PoseTags.includes(Poses[P])) {
-				this.PoseTags.splice(this.PoseTags.indexOf(Poses[P]), 1); // Remove the pose
+		for (const p of poses) {
+			if (this.poseTags.includes(p)) {
+				this.poseTags.splice(this.poseTags.indexOf(p), 1); // Remove the pose
 				changed = true;
 			}
 		}
@@ -270,21 +261,13 @@ class BodySkeleton {
 		return changed;
 	}
 
-
-	/**
-	 * Holds BodySegment options and utility functions
-	 */
-	constructor() {
-		this.segments = [];
-	}
-
 	/**
 	 * Assigns parents to children
-	 * @param {string} Head - Optional name of the head
+	 * @param head - Optional name of the head
 	 */
-	assignParents(Head = "Torso") {
+	assignParents(head: string = 'Torso'): void {
 		for (let S = 0; S < this.segments.length; S++) {
-			if (this.segments[S].Name == Head) {
+			if (this.segments[S].name == head) {
 				this.head = this.segments[S];
 				break;
 			}
@@ -293,26 +276,24 @@ class BodySkeleton {
 			for (let S = 0; S < this.segments.length; S++) {
 				this.segments[S].setParent(this.segments);
 			}
-		} else console.log("Warning, torso not found when generating skeleton");
+		} else console.log('Warning, torso not found when generating skeleton');
 	}
 
 	/**
 	 * Returns the named segment
-	 * @param {string} Name - Name of the segment
-	 * @returns {BodySegment} The segment with the right name, otherwise null
+	 * @param name - Name of the segment
+	 * @returns The segment with the right name, otherwise null
 	 */
-	get(Name) {
-		for (let S = 0; S < this.segments.length; S++) {
-			if (this.segments[S].Name == Name) {
-				return this.segments[S];
-			}
-		}
-		return null;
+	get(name: string): BodySegment | undefined {
+		return this.segments.find((x) => x.name === name);
 	}
 }
 
-class BodySegment {
-	Name;
+/**
+ * Segment for use in Pandora characters
+ */
+export class BodySegment {
+	name: string;
 
 	/**
 	 * @type {{ rule : PriorityRule, seg: string, condition: null | function(BodySkeleton) }[]}
@@ -330,7 +311,7 @@ class BodySegment {
 	/**
 	 * @type {function(BodySkeleton) | null}
 	 */
-	Hide = null;
+	Hide: ((skeleton: BodySkeleton) => void) | null = null;
 	Ext = null;
 	Weight = null;
 
@@ -338,14 +319,15 @@ class BodySegment {
 	currentY = 0;
 	visible = true;
 
-	segParent = null;
+	segParent: BodySegment | null = null;
 	segExtensionParent = null;
-	segChildren = [];
+	segChildren: BodySegment[] = [];
 	segExtension = 0.0;
 
+	invert: boolean = false;
+
 	/**
-	 * A segment for use in Pandora characters
-	 * @param {string} Name - Name of the segment
+	 * @param Name - Name of the segment
 	 * @param {{ rule : PriorityRule, seg: string, condition: null | function(BodySkeleton) }[]} Priority - Render priority
 	 * @param {string[]} PriorityTag - Render priority tag for grouping (e.g arm, or panties)
 	 * @param {number} PriorityFallback - Render priority fallback when items have same priority
@@ -380,13 +362,13 @@ class BodySegment {
 	 * @param {dict} Weight.Offset - a dict {} containing names of params and how much they are offset by based on the weight property assigned to the character body
 	 */
 	constructor(Name, Priority, PriorityTag, PriorityFallback, Path, Parent, Invert, Pos, Rotation, Hide, Ext, Weight) {
-		this.Name = Name;
+		this.name = Name;
 		this.Priority = Priority;
 		this.PriorityTag = PriorityTag;
 		this.PriorityFallback = PriorityFallback;
 		this.Path = Path;
 		this.Parent = Parent;
-		this.Invert = Invert;
+		this.invert = Invert;
 		this.Pos = Pos;
 		this.Rotation = Rotation;
 		this.Hide = Hide;
@@ -396,15 +378,15 @@ class BodySegment {
 
 	/**
 	 * A sets the parent, called for everything in the skeleton once all segments are added
-	 * @param {list} Skeleton - List of BodySegments
-	 * @returns {boolean} - Whether or not the operation was successful
+	 * @param skeleton - List of BodySegments
+	 * @returns - Whether or not the operation was successful
 	 */
-	setParent(Skeleton) {
+	setParent(skeleton: BodySegment[]): boolean {
 		let pass = 0;
 		if (!this.Parent) return true;
-		for (let S = 0; S < Skeleton.length; S++) {
-			if (Skeleton[S].Name == this.Parent) {
-				this.segParent = Skeleton[S];
+		for (let S = 0; S < skeleton.length; S++) {
+			if (skeleton[S].name == this.Parent) {
+				this.segParent = skeleton[S];
 				if (!this.Ext)
 					return this.segParent.addChild(this);
 				else {
@@ -413,25 +395,25 @@ class BodySegment {
 				}
 			}
 		}
-		for (let S = 0; S < Skeleton.length; S++) {
-			if (Skeleton[S].Name == this.Ext.Parent) {
-				this.segExtensionParent = Skeleton[S];
+		for (let S = 0; S < skeleton.length; S++) {
+			if (skeleton[S].name == this.Ext.Parent) {
+				this.segExtensionParent = skeleton[S];
 				pass += 1;
 				break;
 			}
 		}
 
-		return pass == 2;
+		return pass === 2;
 	}
 
 	/**
 	 * Gets a copied list of children
-	 * @returns {list} - List of children
+	 * @returns - List of children
 	 */
-	getChildren() {
-		let temp = [];
-		for (let C = 0; C < this.segChildren.length; C++) {
-			temp.push(this.segChildren[C]);
+	getChildren(): BodySegment[] {
+		const temp: BodySegment[] = [];
+		for (const c of this.segChildren) {
+			temp.push(c);
 		}
 		return temp;
 	}
@@ -439,32 +421,31 @@ class BodySegment {
 	/**
 	 * Clears the current children of the segment
 	 */
-	clearChildren() {
+	clearChildren(): void {
 		this.segChildren = [];
 	}
 
 	/**
 	 * Adds a child to this segment
-	 * @param {BodySegment} Child - The child to add
-	 * @returns {boolean} - Whether or not the operation was successful
+	 * @param child - The child to add
+	 * @returns - Whether or not the operation was successful
 	 */
-	addChild(Child) {
-		for (let C = 0; C < this.segChildren.length; C++) {
-			if (this.segChildren[C].Name == Child.Name) {
+	addChild(child: BodySegment): boolean {
+		for (const c of this.segChildren) {
+			if (c.name === child.name) {
 
 				return false;
 			}
 		}
-		this.segChildren.push(Child);
+		this.segChildren.push(child);
 		return true;
 	}
 
-
 	/**
 	 * Gets the current extension percent
-	 * @returns {float} - Current Extension Percentage
+	 * @returns - Current Extension Percentage
 	 */
-	get extension() {
+	get extension(): number {
 		if (this.Ext && this.segExtensionParent) {
 			this.segExtension = Math.max(-1, Math.min(1, this.segExtensionParent.extension * ((this.Ext.MultNegative != null && this.segExtensionParent.extension < 0) ? this.Ext.MultNegative : this.Ext.Mult)));
 		}
@@ -472,18 +453,17 @@ class BodySegment {
 	}
 	/**
 	 * Gets the current extension as an angle
-	 * @returns {float} - Extension converted to angle
+	 * @returns - Extension converted to angle
 	 */
-	 get extensionAngle() {
-		let ang = 0;
-		if (this.extension > 0) return  (this.Invert ? -1 : 1) * this.Rotation.AngleMax * this.segExtension;
-		else return (this.Invert ? 1 : -1) * this.Rotation.AngleMin * this.segExtension;
+	get extensionAngle(): number {
+		if (this.extension > 0) return (this.invert ? -1 : 1) * this.Rotation.AngleMax * this.segExtension;
+		else return (this.invert ? 1 : -1) * this.Rotation.AngleMin * this.segExtension;
 	}
 	/**
 	 * Gets the absolute extension as an angle
 	 * @returns {float} - Extension converted to angle
 	 */
-	 get extensionAngleAbsolute() {
+	get extensionAngleAbsolute(): number {
 		let ang = this.extensionAngle;
 		if (this.segParent) ang += this.segParent.extensionAngleAbsolute;
 		return ang;
@@ -491,25 +471,25 @@ class BodySegment {
 
 	/**
 	 * Sets the extension in terms of percentage of max
-	 * @param {float} Amount - Sets the extension in terms of percentage of max
+	 * @param amount - Sets the extension in terms of percentage of max
 	 */
-	setExtension(Amount) {
+	setExtension(amount: number): void {
 		if (this.Ext) return;
-		this.segExtension = Math.min(1, Math.max(-1, Amount));
+		this.segExtension = Math.min(1, Math.max(-1, amount));
 	}
 
 	/**
 	 * Sets the extension internally, based on an angle
-	 * @param {float} Angle - Sets the extension in radians
+	 * @param angle - Sets the extension in radians
 	 */
-	setExtensionAngle(Angle) {
+	setExtensionAngle(angle: number): void {
 		if (this.Ext) return;
-		let ang = (this.Invert ? -Angle : Angle);
+		const ang = (this.invert ? -angle : angle);
 		let ext = 0;
 		if (ang > 0 && this.Rotation.AngleMax > 0) {
-			ext = ang/this.Rotation.AngleMax;
+			ext = ang / this.Rotation.AngleMax;
 		} else if (ang < 0 && this.Rotation.AngleMin < 0) {
-			ext = ang/this.Rotation.AngleMin;
+			ext = ang / this.Rotation.AngleMin;
 		}
 
 		this.segExtension = Math.min(1, Math.max(-1, ext));
