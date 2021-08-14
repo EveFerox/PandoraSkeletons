@@ -8,8 +8,8 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/src/index.ts",
-            // "preLaunchTask": "tsc: build - tsconfig.json",
+            "program": "${workspaceFolder}/dist/index.ts",
+            "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
             ]
@@ -21,18 +21,5 @@
             "url": "http://localhost:5501",
             "webRoot": "${workspaceFolder}"
         },
-        {
-            "type": "pwa-msedge",
-            "request": "launch",
-            "name": "Launch Edge against localhost",
-            "url": "http://localhost:5501",
-            "webRoot": "${workspaceFolder}"
-        },
-        {
-            "name": "Launch Microsoft Edge and open the Edge DevTools",
-            "request": "launch",
-            "type": "vscode-edge-devtools.debug",
-            "url": "http://localhost:5501"
-        }
     ]
 }

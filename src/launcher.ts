@@ -5,39 +5,44 @@ import { BodySkeleton, PoseTag, SkeletonContainer } from './skeleton';
 
 let app: PIXI.Application;
 
-let skelly: BodySkeleton;
-let skelly2: BodySkeleton;
+const skeletonContainers: SkeletonContainer[] = [];
 
-const skellies: { skeleton: BodySkeleton, graphics: SkeletonContainer; }[] = [];
+let skellyFront: BodySkeleton;
+let skellySide: BodySkeleton;
+
 let animation = true;
 
 export function LauncherLaunchGame(width: number, height: number): void {
 	// Creates the document
 	app = new PIXI.Application({
-		width, height, backgroundColor: 0x1099bb, resolution: window.devicePixelRatio || 1,
+		width, height,
+		backgroundColor: 0x1099bb,
+		resolution: window.devicePixelRatio || 1,
 	});
 	document.body.appendChild(app.view);
 
 	// Creates a new skeleton and adds it to the skeleton list
-	skelly = new BodySkeleton();
-	GenerateStandardBody(skelly);
-	GenerateStandardOutfit(skelly);
-	skellies.push({ skeleton: skelly, graphics: new SkeletonContainer(skelly) });
+	skellyFront = new BodySkeleton();
+	GenerateStandardBody(skellyFront);
+	GenerateStandardOutfit(skellyFront);
+	const skellyFrontContainer = new SkeletonContainer(skellyFront);
+	skeletonContainers.push(skellyFrontContainer);
 
 	// Moves the skeleton and adds it to the screen
-	let containerBody = skellies[0].graphics.container;
+	let containerBody = skellyFrontContainer.container;
 	app.stage.addChild(containerBody);
 	containerBody.x = app.screen.width * .4;
 	containerBody.y = app.screen.height / 2;
 
 	// Creates a new skeleton and adds it to the skeleton list
-	skelly2 = new BodySkeleton();
-	GenerateSideBody(skelly2);
-	GenerateSideOutfit(skelly2);
-	skellies.push({ skeleton: skelly2, graphics: new SkeletonContainer(skelly2) });
+	skellySide = new BodySkeleton();
+	GenerateSideBody(skellySide);
+	GenerateSideOutfit(skellySide);
+	const skellySideContainer = new SkeletonContainer(skellySide);
+	skeletonContainers.push(skellySideContainer);
 
 	// Moves the skeleton and adds it to the screen
-	containerBody = skellies[1].graphics.container;
+	containerBody = skellySideContainer.container;
 	app.stage.addChild(containerBody);
 	containerBody.x = app.screen.width * .75;
 	containerBody.y = app.screen.height / 2 - 170;
@@ -60,11 +65,11 @@ export function LauncherLaunchGame(width: number, height: number): void {
 			if (currentMode) change = -0.005;
 			let extension = 0;
 
-			extension = skelly.get('ArmL').extension;
-			skelly.get('ArmL').setExtension(extension + change * delta);
-			skelly2.get('ArmL').setExtension(extension + change * delta);
-			extension = skelly.get('ArmR').extension;
-			skelly.get('ArmR').setExtension(extension + change * delta);
+			extension = skellyFront.get('ArmL').extension;
+			skellyFront.get('ArmL').setExtension(extension + change * delta);
+			skellySide.get('ArmL').setExtension(extension + change * delta);
+			extension = skellyFront.get('ArmR').extension;
+			skellyFront.get('ArmR').setExtension(extension + change * delta);
 
 			if (extension >= 1) currentMode = true;
 			if (extension <= -1) currentMode = false;
@@ -72,13 +77,13 @@ export function LauncherLaunchGame(width: number, height: number): void {
 			change = 0.0025;
 			if (currentMode3) change = -0.0025;
 
-			extension = skelly.get('ForeArmL').extension;
-			skelly.get('ForeArmL').setExtension(extension - change * delta);
-			extension = skelly2.get('ShinR').extension;
-			skelly2.get('ShinR').setExtension(extension - change * delta);
-			extension = skelly.get('ForeArmR').extension;
-			skelly.get('ForeArmR').setExtension(extension + change * delta);
-			skelly2.get('ShinL').setExtension(extension + change * delta);
+			extension = skellyFront.get('ForeArmL').extension;
+			skellyFront.get('ForeArmL').setExtension(extension - change * delta);
+			extension = skellySide.get('ShinR').extension;
+			skellySide.get('ShinR').setExtension(extension - change * delta);
+			extension = skellyFront.get('ForeArmR').extension;
+			skellyFront.get('ForeArmR').setExtension(extension + change * delta);
+			skellySide.get('ShinL').setExtension(extension + change * delta);
 
 			if (extension >= 1) currentMode3 = true;
 			if (extension <= -1) currentMode3 = false;
@@ -88,13 +93,13 @@ export function LauncherLaunchGame(width: number, height: number): void {
 			if (currentMode2) change = -0.004;
 			extension = 0;
 
-			extension = skelly.get('LegL').extension;
-			skelly.get('LegL').setExtension(extension + change * delta);
-			extension = skelly2.get('ThighR').extension;
-			skelly2.get('ThighR').setExtension(extension + change * delta);
-			extension = skelly.get('LegR').extension;
-			skelly.get('LegR').setExtension(extension + change * delta);
-			skelly2.get('ArmR').setExtension(extension + change * delta);
+			extension = skellyFront.get('LegL').extension;
+			skellyFront.get('LegL').setExtension(extension + change * delta);
+			extension = skellySide.get('ThighR').extension;
+			skellySide.get('ThighR').setExtension(extension + change * delta);
+			extension = skellyFront.get('LegR').extension;
+			skellyFront.get('LegR').setExtension(extension + change * delta);
+			skellySide.get('ArmR').setExtension(extension + change * delta);
 			if (extension >= 1) currentMode2 = true;
 			if (extension <= -1) currentMode2 = false;
 
@@ -103,9 +108,9 @@ export function LauncherLaunchGame(width: number, height: number): void {
 			if (currentMode4) change = -0.001;
 			extension = 0;
 
-			extension = skelly.get('Head').extension;
-			skelly.get('Head').setExtension(extension + change * delta);
-			skelly2.get('Head').setExtension(extension + change * delta);
+			extension = skellyFront.get('Head').extension;
+			skellyFront.get('Head').setExtension(extension + change * delta);
+			skellySide.get('Head').setExtension(extension + change * delta);
 			if (extension >= 1) currentMode4 = true;
 			if (extension <= -1) currentMode4 = false;
 
@@ -114,16 +119,16 @@ export function LauncherLaunchGame(width: number, height: number): void {
 			if (currentMode5) change = -0.002;
 			extension = 0;
 
-			extension = skelly.get('Chest').extension;
-			skelly.get('Chest').setExtension(extension + change * delta);
-			skelly2.get('Chest').setExtension(extension + change * delta);
+			extension = skellyFront.get('Chest').extension;
+			skellyFront.get('Chest').setExtension(extension + change * delta);
+			skellySide.get('Chest').setExtension(extension + change * delta);
 			if (extension >= 1) currentMode5 = true;
 			if (extension <= -1) currentMode5 = false;
 		}
 
 		// update all graphics to represent changes to skeletons
-		for (const s of skellies) {
-			s.graphics.update();
+		for (const s of skeletonContainers) {
+			s.update();
 		}
 	});
 }
@@ -175,275 +180,268 @@ function fntoggleAnimation() {
 	animation = !animation;
 }
 function fntoggleKneelLeft() {
-	if (!skelly.removePose([PoseTag.KNEEL_LEFT])) skelly.addPose([PoseTag.KNEEL_LEFT]);
-	if (!skelly2.removePose([PoseTag.KNEEL_LEFT])) skelly2.addPose([PoseTag.KNEEL_LEFT]);
+	if (!skellyFront.removePose([PoseTag.KNEEL_LEFT])) skellyFront.addPose([PoseTag.KNEEL_LEFT]);
+	if (!skellySide.removePose([PoseTag.KNEEL_LEFT])) skellySide.addPose([PoseTag.KNEEL_LEFT]);
 }
 function fntoggleKneelRight() {
-	if (!skelly.removePose([PoseTag.KNEEL_RIGHT])) skelly.addPose([PoseTag.KNEEL_RIGHT]);
-	if (!skelly2.removePose([PoseTag.KNEEL_RIGHT])) skelly2.addPose([PoseTag.KNEEL_RIGHT]);
+	if (!skellyFront.removePose([PoseTag.KNEEL_RIGHT])) skellyFront.addPose([PoseTag.KNEEL_RIGHT]);
+	if (!skellySide.removePose([PoseTag.KNEEL_RIGHT])) skellySide.addPose([PoseTag.KNEEL_RIGHT]);
 }
 function fntoggleTiptoes() {
-	if (!skelly.removePose([PoseTag.TIPTOE_LEFT, PoseTag.TIPTOE_RIGHT])) skelly.addPose([PoseTag.TIPTOE_LEFT, PoseTag.TIPTOE_RIGHT]);
-	if (!skelly2.removePose([PoseTag.TIPTOE_LEFT, PoseTag.TIPTOE_RIGHT])) skelly2.addPose([PoseTag.TIPTOE_LEFT, PoseTag.TIPTOE_RIGHT]);
+	if (!skellyFront.removePose([PoseTag.TIPTOE_LEFT, PoseTag.TIPTOE_RIGHT])) skellyFront.addPose([PoseTag.TIPTOE_LEFT, PoseTag.TIPTOE_RIGHT]);
+	if (!skellySide.removePose([PoseTag.TIPTOE_LEFT, PoseTag.TIPTOE_RIGHT])) skellySide.addPose([PoseTag.TIPTOE_LEFT, PoseTag.TIPTOE_RIGHT]);
 }
 function fntoggleFistLeft() {
-	if (!skelly.removePose([PoseTag.FIST_LEFT])) skelly.addPose([PoseTag.FIST_LEFT]);
-	if (!skelly2.removePose([PoseTag.FIST_LEFT])) skelly2.addPose([PoseTag.FIST_LEFT]);
+	if (!skellyFront.removePose([PoseTag.FIST_LEFT])) skellyFront.addPose([PoseTag.FIST_LEFT]);
+	if (!skellySide.removePose([PoseTag.FIST_LEFT])) skellySide.addPose([PoseTag.FIST_LEFT]);
 }
 function fntoggleFistRight() {
-	if (!skelly.removePose([PoseTag.FIST_RIGHT])) skelly.addPose([PoseTag.FIST_RIGHT]);
-	if (!skelly2.removePose([PoseTag.FIST_RIGHT])) skelly2.addPose([PoseTag.FIST_RIGHT]);
+	if (!skellyFront.removePose([PoseTag.FIST_RIGHT])) skellyFront.addPose([PoseTag.FIST_RIGHT]);
+	if (!skellySide.removePose([PoseTag.FIST_RIGHT])) skellySide.addPose([PoseTag.FIST_RIGHT]);
 }
 function fntoggleBehindBack() {
-	if (!skelly.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT])) skelly.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
-	if (!skelly2.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT])) skelly2.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
+	if (!skellyFront.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT])) skellyFront.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
+	if (!skellySide.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT])) skellySide.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
 }
 
 function fnboxtie() {
 	animation = false;
 
-	skelly.get('ArmL').setExtension(0.825);
-	skelly.get('ArmR').setExtension(0.825);
-	skelly.get('ForeArmL').setExtension(0.7);
-	skelly.get('ForeArmR').setExtension(0.7);
+	skellyFront.get('ArmL').setExtension(0.825);
+	skellyFront.get('ArmR').setExtension(0.825);
+	skellyFront.get('ForeArmL').setExtension(0.7);
+	skellyFront.get('ForeArmR').setExtension(0.7);
 
-	skelly2.get('ArmL').setExtension(0.635);
-	skelly2.get('ArmR').setExtension(0.635);
+	skellySide.get('ArmL').setExtension(0.635);
+	skellySide.get('ArmR').setExtension(0.635);
 
-	skelly.removePose([PoseTag.YOKED]);
-	skelly2.removePose([PoseTag.YOKED]);
-	skelly.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT]);
-	skelly2.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT]);
-	skelly.addPose([PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.BOXTIE]);
-	skelly2.addPose([PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.BOXTIE]);
+	skellyFront.removePose([PoseTag.YOKED]);
+	skellySide.removePose([PoseTag.YOKED]);
+	skellyFront.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT]);
+	skellySide.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT]);
+	skellyFront.addPose([PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.BOXTIE]);
+	skellySide.addPose([PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.BOXTIE]);
 }
 function fnarmsbehindback() {
 	animation = false;
 
-	skelly.get('ArmL').setExtension(0.925);
-	skelly.get('ArmR').setExtension(0.925);
-	skelly.get('ForeArmL').setExtension(0);
-	skelly.get('ForeArmR').setExtension(0);
+	skellyFront.get('ArmL').setExtension(0.925);
+	skellyFront.get('ArmR').setExtension(0.925);
+	skellyFront.get('ForeArmL').setExtension(0);
+	skellyFront.get('ForeArmR').setExtension(0);
 
-	skelly2.get('ArmL').setExtension(.72);
-	skelly2.get('ForeArmL').setExtension(-0.1);
-	skelly2.get('ArmR').setExtension(0.7);
-	skelly2.get('ForeArmR').setExtension(-0.05);
+	skellySide.get('ArmL').setExtension(.72);
+	skellySide.get('ForeArmL').setExtension(-0.1);
+	skellySide.get('ArmR').setExtension(0.7);
+	skellySide.get('ForeArmR').setExtension(-0.05);
 
-	skelly.removePose([PoseTag.YOKED]);
-	skelly2.removePose([PoseTag.YOKED]);
-	skelly.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
-	skelly2.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
-	skelly.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
-	skelly2.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
+	skellyFront.removePose([PoseTag.YOKED]);
+	skellySide.removePose([PoseTag.YOKED]);
+	skellyFront.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellySide.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellyFront.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
+	skellySide.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
 }
 function fnarmsbehindbacktight() {
 	animation = false;
 
-	skelly.get('ArmL').setExtension(1);
-	skelly.get('ArmR').setExtension(1);
-	skelly.get('ForeArmL').setExtension(0.075);
-	skelly.get('ForeArmR').setExtension(0.075);
+	skellyFront.get('ArmL').setExtension(1);
+	skellyFront.get('ArmR').setExtension(1);
+	skellyFront.get('ForeArmL').setExtension(0.075);
+	skellyFront.get('ForeArmR').setExtension(0.075);
 
-	skelly2.get('ArmL').setExtension(.67);
-	skelly2.get('ForeArmL').setExtension(-0.02);
-	skelly2.get('ArmR').setExtension(0.67);
-	skelly2.get('ForeArmR').setExtension(-0.02);
+	skellySide.get('ArmL').setExtension(.67);
+	skellySide.get('ForeArmL').setExtension(-0.02);
+	skellySide.get('ArmR').setExtension(0.67);
+	skellySide.get('ForeArmR').setExtension(-0.02);
 
-	skelly.removePose([PoseTag.YOKED]);
-	skelly2.removePose([PoseTag.YOKED]);
-	skelly.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
-	skelly2.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
-	skelly.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
-	skelly2.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
+	skellyFront.removePose([PoseTag.YOKED]);
+	skellySide.removePose([PoseTag.YOKED]);
+	skellyFront.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellySide.removePose([PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellyFront.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
+	skellySide.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT]);
 }
 function fnarmst() {
 	animation = false;
 
-	skelly.get('ArmL').setExtension(.9);
-	skelly.get('ArmR').setExtension(.9);
-	skelly.get('ForeArmL').setExtension(0.74);
-	skelly.get('ForeArmR').setExtension(0.74);
+	skellyFront.get('ArmL').setExtension(.9);
+	skellyFront.get('ArmR').setExtension(.9);
+	skellyFront.get('ForeArmL').setExtension(0.74);
+	skellyFront.get('ForeArmR').setExtension(0.74);
 
-	skelly2.get('ArmL').setExtension(0.7);
-	skelly2.get('ForeArmL').setExtension(-1);
-	skelly2.get('ArmR').setExtension(0.7);
-	skelly2.get('ForeArmR').setExtension(-1);
+	skellySide.get('ArmL').setExtension(0.7);
+	skellySide.get('ForeArmL').setExtension(-1);
+	skellySide.get('ArmR').setExtension(0.7);
+	skellySide.get('ForeArmR').setExtension(-1);
 
-	skelly.removePose([PoseTag.YOKED]);
-	skelly2.removePose([PoseTag.YOKED]);
-	skelly.removePose([PoseTag.BOXTIE]);
-	skelly2.removePose([PoseTag.BOXTIE]);
-	skelly.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT]);
-	skelly2.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT]);
+	skellyFront.removePose([PoseTag.YOKED]);
+	skellySide.removePose([PoseTag.YOKED]);
+	skellyFront.removePose([PoseTag.BOXTIE]);
+	skellySide.removePose([PoseTag.BOXTIE]);
+	skellyFront.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT]);
+	skellySide.addPose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT]);
 }
 function fnarmsfront() {
 	animation = false;
 
-	skelly.get('ArmL').setExtension(.8);
-	skelly.get('ArmR').setExtension(.8);
-	skelly.get('ForeArmL').setExtension(0.26);
-	skelly.get('ForeArmR').setExtension(0.26);
+	skellyFront.get('ArmL').setExtension(.8);
+	skellyFront.get('ArmR').setExtension(.8);
+	skellyFront.get('ForeArmL').setExtension(0.26);
+	skellyFront.get('ForeArmR').setExtension(0.26);
 
-	skelly2.get('ArmL').setExtension(.475);
-	skelly2.get('ForeArmL').setExtension(-.1);
-	skelly2.get('ArmR').setExtension(0.5);
-	skelly2.get('ForeArmR').setExtension(-.125);
+	skellySide.get('ArmL').setExtension(.475);
+	skellySide.get('ForeArmL').setExtension(-.1);
+	skellySide.get('ArmR').setExtension(0.5);
+	skellySide.get('ForeArmR').setExtension(-.125);
 
-	skelly.removePose([PoseTag.YOKED]);
-	skelly2.removePose([PoseTag.YOKED]);
-	skelly.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
-	skelly2.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellyFront.removePose([PoseTag.YOKED]);
+	skellySide.removePose([PoseTag.YOKED]);
+	skellyFront.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellySide.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
 }
 function fnarmsfiddle() {
 	animation = false;
 
-	skelly.get('ArmL').setExtension(1);
-	skelly.get('ArmR').setExtension(1);
-	skelly.get('ForeArmL').setExtension(1);
-	skelly.get('ForeArmR').setExtension(1);
+	skellyFront.get('ArmL').setExtension(1);
+	skellyFront.get('ArmR').setExtension(1);
+	skellyFront.get('ForeArmL').setExtension(1);
+	skellyFront.get('ForeArmR').setExtension(1);
 
-	skelly2.get('ArmL').setExtension(0.2);
-	skelly2.get('ForeArmL').setExtension(-.5);
-	skelly2.get('ArmR').setExtension(0.225);
-	skelly2.get('ForeArmR').setExtension(-.525);
+	skellySide.get('ArmL').setExtension(0.2);
+	skellySide.get('ForeArmL').setExtension(-.5);
+	skellySide.get('ArmR').setExtension(0.225);
+	skellySide.get('ForeArmR').setExtension(-.525);
 
-	skelly.removePose([PoseTag.YOKED]);
-	skelly2.removePose([PoseTag.YOKED]);
-	skelly.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
-	skelly2.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellyFront.removePose([PoseTag.YOKED]);
+	skellySide.removePose([PoseTag.YOKED]);
+	skellyFront.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellySide.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
 }
 function fnarmsoverhead() {
 	animation = false;
 
-	skelly.get('ArmL').setExtension(-0.7);
-	skelly.get('ArmR').setExtension(-0.7);
-	skelly.get('ForeArmL').setExtension(-0.7);
-	skelly.get('ForeArmR').setExtension(-0.7);
+	skellyFront.get('ArmL').setExtension(-0.7);
+	skellyFront.get('ArmR').setExtension(-0.7);
+	skellyFront.get('ForeArmL').setExtension(-0.7);
+	skellyFront.get('ForeArmR').setExtension(-0.7);
 
-	skelly2.get('ArmL').setExtension(-.325);
-	skelly2.get('ForeArmL').setExtension(-.525);
-	skelly2.get('ArmR').setExtension(-.3);
-	skelly2.get('ForeArmR').setExtension(-.5);
+	skellySide.get('ArmL').setExtension(-.325);
+	skellySide.get('ForeArmL').setExtension(-.525);
+	skellySide.get('ArmR').setExtension(-.3);
+	skellySide.get('ForeArmR').setExtension(-.5);
 
-	skelly.removePose([PoseTag.YOKED]);
-	skelly2.removePose([PoseTag.YOKED]);
-	skelly.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
-	skelly2.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellyFront.removePose([PoseTag.YOKED]);
+	skellySide.removePose([PoseTag.YOKED]);
+	skellyFront.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellySide.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
 }
 function fnarmsside() {
 	animation = false;
 
-	skelly.get('ArmL').setExtension(.8);
-	skelly.get('ArmR').setExtension(.8);
-	skelly.get('ForeArmL').setExtension(-0.1);
-	skelly.get('ForeArmR').setExtension(-0.1);
+	skellyFront.get('ArmL').setExtension(.8);
+	skellyFront.get('ArmR').setExtension(.8);
+	skellyFront.get('ForeArmL').setExtension(-0.1);
+	skellyFront.get('ForeArmR').setExtension(-0.1);
 
-	skelly2.get('ArmL').setExtension(.525);
-	skelly2.get('ForeArmL').setExtension(-.0);
-	skelly2.get('ArmR').setExtension(0.525);
-	skelly2.get('ForeArmR').setExtension(-.025);
+	skellySide.get('ArmL').setExtension(.525);
+	skellySide.get('ForeArmL').setExtension(-.0);
+	skellySide.get('ArmR').setExtension(0.525);
+	skellySide.get('ForeArmR').setExtension(-.025);
 
-	skelly.removePose([PoseTag.YOKED]);
-	skelly2.removePose([PoseTag.YOKED]);
-	skelly.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
-	skelly2.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellyFront.removePose([PoseTag.YOKED]);
+	skellySide.removePose([PoseTag.YOKED]);
+	skellyFront.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellySide.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.FIST_LEFT, PoseTag.FIST_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
 }
 function fnarmsyoked() {
 	animation = false;
 
-	skelly.get('ArmL').setExtension(.15);
-	skelly.get('ArmR').setExtension(.15);
-	skelly.get('ForeArmL').setExtension(-0.95);
-	skelly.get('ForeArmR').setExtension(-0.95);
+	skellyFront.get('ArmL').setExtension(.15);
+	skellyFront.get('ArmR').setExtension(.15);
+	skellyFront.get('ForeArmL').setExtension(-0.95);
+	skellyFront.get('ForeArmR').setExtension(-0.95);
 
-	skelly2.get('ArmL').setExtension(.5);
-	skelly2.get('ForeArmL').setExtension(1);
-	skelly2.get('ArmR').setExtension(0.5);
-	skelly2.get('ForeArmR').setExtension(1);
+	skellySide.get('ArmL').setExtension(.5);
+	skellySide.get('ForeArmL').setExtension(1);
+	skellySide.get('ArmR').setExtension(0.5);
+	skellySide.get('ForeArmR').setExtension(1);
 
-	skelly.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
-	skelly2.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
-	skelly.addPose([PoseTag.YOKED]);
-	skelly2.addPose([PoseTag.YOKED]);
+	skellyFront.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellySide.removePose([PoseTag.HANDBEHINDBACK_LEFT, PoseTag.HANDBEHINDBACK_RIGHT, PoseTag.REVERSEPRAYER_LEFT, PoseTag.REVERSEPRAYER_RIGHT, PoseTag.BOXTIE]);
+	skellyFront.addPose([PoseTag.YOKED]);
+	skellySide.addPose([PoseTag.YOKED]);
 }
-
 function fnlegsspread() {
 	animation = false;
 
-	skelly.get('LegL').setExtension(-0.5);
-	skelly.get('LegR').setExtension(-0.5);
+	skellyFront.get('LegL').setExtension(-0.5);
+	skellyFront.get('LegR').setExtension(-0.5);
 
-	skelly2.get('ThighL').setExtension(-0.7);
-	skelly2.get('ShinL').setExtension(0.03);
-	skelly2.get('FootL').setExtension(1);
-	skelly2.get('ThighR').setExtension(0.5);
-	skelly2.get('ShinR').setExtension(-0.05);
-	skelly2.get('FootR').setExtension(-1);
-
+	skellySide.get('ThighL').setExtension(-0.7);
+	skellySide.get('ShinL').setExtension(0.03);
+	skellySide.get('FootL').setExtension(1);
+	skellySide.get('ThighR').setExtension(0.5);
+	skellySide.get('ShinR').setExtension(-0.05);
+	skellySide.get('FootR').setExtension(-1);
 }
 function fnlegswide() {
 	animation = false;
 
-	skelly.get('LegL').setExtension(-0.3);
-	skelly.get('LegR').setExtension(-0.3);
+	skellyFront.get('LegL').setExtension(-0.3);
+	skellyFront.get('LegR').setExtension(-0.3);
 
-	skelly2.get('ThighL').setExtension(-0.4);
-	skelly2.get('ShinL').setExtension(-0.0);
-	skelly2.get('FootL').setExtension(.6);
-	skelly2.get('ThighR').setExtension(0.3);
-	skelly2.get('ShinR').setExtension(-0.05);
-	skelly2.get('FootR').setExtension(-.6);
-
+	skellySide.get('ThighL').setExtension(-0.4);
+	skellySide.get('ShinL').setExtension(-0.0);
+	skellySide.get('FootL').setExtension(.6);
+	skellySide.get('ThighR').setExtension(0.3);
+	skellySide.get('ShinR').setExtension(-0.05);
+	skellySide.get('FootR').setExtension(-.6);
 }
 function fnlegsclosed() {
 	animation = false;
 
-	skelly.get('LegL').setExtension(0);
-	skelly.get('LegR').setExtension(0);
+	skellyFront.get('LegL').setExtension(0);
+	skellyFront.get('LegR').setExtension(0);
 
-	skelly2.get('ThighL').setExtension(-0.02);
-	skelly2.get('ShinL').setExtension(-0.0);
-	skelly2.get('FootL').setExtension(-0);
-	skelly2.get('ThighR').setExtension(0.15);
-	skelly2.get('ShinR').setExtension(-0.05);
-	skelly2.get('FootR').setExtension(-0.1);
+	skellySide.get('ThighL').setExtension(-0.02);
+	skellySide.get('ShinL').setExtension(-0.0);
+	skellySide.get('FootL').setExtension(-0);
+	skellySide.get('ThighR').setExtension(0.15);
+	skellySide.get('ShinR').setExtension(-0.05);
+	skellySide.get('FootR').setExtension(-0.1);
 }
-
 function fnlegsnormal() {
 	animation = false;
 
-	skelly.get('LegL').setExtension(-0.1);
-	skelly.get('LegR').setExtension(-0.1);
+	skellyFront.get('LegL').setExtension(-0.1);
+	skellyFront.get('LegR').setExtension(-0.1);
 
-	skelly2.get('ThighL').setExtension(-0.08);
-	skelly2.get('ShinL').setExtension(-0.0);
-	skelly2.get('FootL').setExtension(0.13);
-	skelly2.get('ThighR').setExtension(0.23);
-	skelly2.get('ShinR').setExtension(-0);
-	skelly2.get('FootR').setExtension(-0.17);
+	skellySide.get('ThighL').setExtension(-0.08);
+	skellySide.get('ShinL').setExtension(-0.0);
+	skellySide.get('FootL').setExtension(0.13);
+	skellySide.get('ThighR').setExtension(0.23);
+	skellySide.get('ShinR').setExtension(-0);
+	skellySide.get('FootR').setExtension(-0.17);
 }
 function fnlegstight() {
 	animation = false;
 
-	skelly.get('LegL').setExtension(1);
-	skelly.get('LegR').setExtension(1);
+	skellyFront.get('LegL').setExtension(1);
+	skellyFront.get('LegR').setExtension(1);
 
-	skelly2.get('ThighL').setExtension(0);
-	skelly2.get('ShinL').setExtension(0);
-	skelly2.get('FootL').setExtension(0);
-	skelly2.get('ThighR').setExtension(0);
-	skelly2.get('ShinR').setExtension(0);
-	skelly2.get('FootR').setExtension(0);
-
+	skellySide.get('ThighL').setExtension(0);
+	skellySide.get('ShinL').setExtension(0);
+	skellySide.get('FootL').setExtension(0);
+	skellySide.get('ThighR').setExtension(0);
+	skellySide.get('ShinR').setExtension(0);
+	skellySide.get('FootR').setExtension(0);
 }
 function fnresethead() {
-	skelly.get('Head').setExtension(0);
-	skelly2.get('Head').setExtension(0);
-
+	skellyFront.get('Head').setExtension(0);
+	skellySide.get('Head').setExtension(0);
 }
 function fnresettorso() {
-	skelly.get('Chest').setExtension(0);
-	skelly2.get('Chest').setExtension(0);
-
+	skellyFront.get('Chest').setExtension(0);
+	skellySide.get('Chest').setExtension(0);
 }

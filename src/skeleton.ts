@@ -182,8 +182,8 @@ export class SkeletonContainer {
 						}
 
 						for (const searchName of searchNames) {
-							const currPri = pri.get(seg.name);
-							const rulePri = pri.get(searchName);
+							const currPri = pri.get(seg.name) ?? 0;
+							const rulePri = pri.get(searchName) ?? 0;
 							if (priority.rule === PriorityRule.ABOVE && currPri <= rulePri) {
 								pri.set(seg.name, currPri + 1);
 								pri.set(searchName, rulePri - 1);
@@ -200,7 +200,7 @@ export class SkeletonContainer {
 				}
 			}
 
-			tempOrder.sort((a, b) => pri.get(a.name) - pri.get(b.name));
+			tempOrder.sort((a, b) => (pri.get(a.name) ?? 0) - (pri.get(b.name) ?? 0));
 			iterations++;
 		}
 		if (iterations === iterationMax) {
@@ -211,7 +211,10 @@ export class SkeletonContainer {
 		}
 
 		for (const seg of this.renderOrder) {
-			this.containers[seg.name].zIndex = pri.get(seg.name) + (seg.priorityFallback / highestFallback);
+			const container = this.containers.get(seg.name);
+			if (container === undefined) continue;
+
+			container.zIndex = (pri.get(seg.name) ?? 0) + (seg.priorityFallback / highestFallback);
 		}
 
 		this.container.sortChildren();
@@ -237,8 +240,13 @@ export class SkeletonContainer {
 
 			segContainer.rotation = seg.extensionAngleAbsolute;
 
+			const firstChild = segContainer.children[0];
+			if (firstChild === undefined) {
+				continue;
+			}
+
 			if (seg.hide && seg.hide(this.skeleton)) {
-				segContainer.children[0].visible = false;
+				firstChild.visible = false;
 				seg.visible = false;
 			} else {
 				let xoffset = 0;
@@ -265,13 +273,13 @@ export class SkeletonContainer {
 				segContainer.y = seg.currentY;
 
 				if (seg.rotation.hideExtAbove && seg.extension > seg.rotation.hideExtAbove) {
-					segContainer.children[0].visible = false;
+					firstChild.visible = false;
 					seg.visible = false;
 				} else if (seg.rotation.hideExtBelow && seg.extension <= seg.rotation.hideExtBelow) {
-					segContainer.children[0].visible = false;
+					firstChild.visible = false;
 					seg.visible = false;
 				} else {
-					segContainer.children[0].visible = true;
+					firstChild.visible = true;
 					seg.visible = true;
 				}
 			}
