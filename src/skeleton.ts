@@ -80,9 +80,6 @@ export interface IExtension {
 }
 
 export interface IWeight {
-	//  * @param {dict} Weight.Mult - a dict {} containing names of params and how much they are multiplied by based on the weight property assigned to the character body
-	//  * @param {dict} Weight.Offset - a dict {} containing names of params and how much they are offset by based on the weight property assigned to the character body
-
 	/**Map containing names of params and how much they are multiplied by based on the weight property assigned to the character body */
 	mult: Map<string, any>;
 
@@ -317,7 +314,7 @@ export class BodySkeleton {
 
 	/**
 	 * Removes poses
-	 * @param poses - List of poses to add
+	 * @param poses - List of poses to remove
 	 */
 	removePose(poses: PoseTag[]): boolean {
 		let changed = false;
